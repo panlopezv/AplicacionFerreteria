@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package controladores;
 
 import controlador.exceptions.NonexistentEntityException;
-import entidades.Abono;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entidades.Compra;
+import entidades.Venta;
 import entidades.ModoPago;
+import entidades.Pago;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,9 +22,9 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author Pablo
  */
-public class AbonoJpaController implements Serializable {
+public class PagoJpaController implements Serializable {
 
-    public AbonoJpaController(EntityManagerFactory emf) {
+    public PagoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -33,28 +33,28 @@ public class AbonoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Abono abono) {
+    public void create(Pago pago) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Compra compraid = abono.getCompraid();
-            if (compraid != null) {
-                compraid = em.getReference(compraid.getClass(), compraid.getId());
-                abono.setCompraid(compraid);
+            Venta ventaid = pago.getVentaid();
+            if (ventaid != null) {
+                ventaid = em.getReference(ventaid.getClass(), ventaid.getId());
+                pago.setVentaid(ventaid);
             }
-            ModoPago modoPagoid = abono.getModoPagoid();
+            ModoPago modoPagoid = pago.getModoPagoid();
             if (modoPagoid != null) {
                 modoPagoid = em.getReference(modoPagoid.getClass(), modoPagoid.getId());
-                abono.setModoPagoid(modoPagoid);
+                pago.setModoPagoid(modoPagoid);
             }
-            em.persist(abono);
-            if (compraid != null) {
-                compraid.getAbonoList().add(abono);
-                compraid = em.merge(compraid);
+            em.persist(pago);
+            if (ventaid != null) {
+                ventaid.getPagoList().add(pago);
+                ventaid = em.merge(ventaid);
             }
             if (modoPagoid != null) {
-                modoPagoid.getAbonoList().add(abono);
+                modoPagoid.getPagoList().add(pago);
                 modoPagoid = em.merge(modoPagoid);
             }
             em.getTransaction().commit();
@@ -65,48 +65,48 @@ public class AbonoJpaController implements Serializable {
         }
     }
 
-    public void edit(Abono abono) throws NonexistentEntityException, Exception {
+    public void edit(Pago pago) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Abono persistentAbono = em.find(Abono.class, abono.getId());
-            Compra compraidOld = persistentAbono.getCompraid();
-            Compra compraidNew = abono.getCompraid();
-            ModoPago modoPagoidOld = persistentAbono.getModoPagoid();
-            ModoPago modoPagoidNew = abono.getModoPagoid();
-            if (compraidNew != null) {
-                compraidNew = em.getReference(compraidNew.getClass(), compraidNew.getId());
-                abono.setCompraid(compraidNew);
+            Pago persistentPago = em.find(Pago.class, pago.getIdPago());
+            Venta ventaidOld = persistentPago.getVentaid();
+            Venta ventaidNew = pago.getVentaid();
+            ModoPago modoPagoidOld = persistentPago.getModoPagoid();
+            ModoPago modoPagoidNew = pago.getModoPagoid();
+            if (ventaidNew != null) {
+                ventaidNew = em.getReference(ventaidNew.getClass(), ventaidNew.getId());
+                pago.setVentaid(ventaidNew);
             }
             if (modoPagoidNew != null) {
                 modoPagoidNew = em.getReference(modoPagoidNew.getClass(), modoPagoidNew.getId());
-                abono.setModoPagoid(modoPagoidNew);
+                pago.setModoPagoid(modoPagoidNew);
             }
-            abono = em.merge(abono);
-            if (compraidOld != null && !compraidOld.equals(compraidNew)) {
-                compraidOld.getAbonoList().remove(abono);
-                compraidOld = em.merge(compraidOld);
+            pago = em.merge(pago);
+            if (ventaidOld != null && !ventaidOld.equals(ventaidNew)) {
+                ventaidOld.getPagoList().remove(pago);
+                ventaidOld = em.merge(ventaidOld);
             }
-            if (compraidNew != null && !compraidNew.equals(compraidOld)) {
-                compraidNew.getAbonoList().add(abono);
-                compraidNew = em.merge(compraidNew);
+            if (ventaidNew != null && !ventaidNew.equals(ventaidOld)) {
+                ventaidNew.getPagoList().add(pago);
+                ventaidNew = em.merge(ventaidNew);
             }
             if (modoPagoidOld != null && !modoPagoidOld.equals(modoPagoidNew)) {
-                modoPagoidOld.getAbonoList().remove(abono);
+                modoPagoidOld.getPagoList().remove(pago);
                 modoPagoidOld = em.merge(modoPagoidOld);
             }
             if (modoPagoidNew != null && !modoPagoidNew.equals(modoPagoidOld)) {
-                modoPagoidNew.getAbonoList().add(abono);
+                modoPagoidNew.getPagoList().add(pago);
                 modoPagoidNew = em.merge(modoPagoidNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = abono.getId();
-                if (findAbono(id) == null) {
-                    throw new NonexistentEntityException("The abono with id " + id + " no longer exists.");
+                Integer id = pago.getIdPago();
+                if (findPago(id) == null) {
+                    throw new NonexistentEntityException("The pago with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -122,24 +122,24 @@ public class AbonoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Abono abono;
+            Pago pago;
             try {
-                abono = em.getReference(Abono.class, id);
-                abono.getId();
+                pago = em.getReference(Pago.class, id);
+                pago.getIdPago();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The abono with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The pago with id " + id + " no longer exists.", enfe);
             }
-            Compra compraid = abono.getCompraid();
-            if (compraid != null) {
-                compraid.getAbonoList().remove(abono);
-                compraid = em.merge(compraid);
+            Venta ventaid = pago.getVentaid();
+            if (ventaid != null) {
+                ventaid.getPagoList().remove(pago);
+                ventaid = em.merge(ventaid);
             }
-            ModoPago modoPagoid = abono.getModoPagoid();
+            ModoPago modoPagoid = pago.getModoPagoid();
             if (modoPagoid != null) {
-                modoPagoid.getAbonoList().remove(abono);
+                modoPagoid.getPagoList().remove(pago);
                 modoPagoid = em.merge(modoPagoid);
             }
-            em.remove(abono);
+            em.remove(pago);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -148,19 +148,19 @@ public class AbonoJpaController implements Serializable {
         }
     }
 
-    public List<Abono> findAbonoEntities() {
-        return findAbonoEntities(true, -1, -1);
+    public List<Pago> findPagoEntities() {
+        return findPagoEntities(true, -1, -1);
     }
 
-    public List<Abono> findAbonoEntities(int maxResults, int firstResult) {
-        return findAbonoEntities(false, maxResults, firstResult);
+    public List<Pago> findPagoEntities(int maxResults, int firstResult) {
+        return findPagoEntities(false, maxResults, firstResult);
     }
 
-    private List<Abono> findAbonoEntities(boolean all, int maxResults, int firstResult) {
+    private List<Pago> findPagoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Abono.class));
+            cq.select(cq.from(Pago.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -172,20 +172,20 @@ public class AbonoJpaController implements Serializable {
         }
     }
 
-    public Abono findAbono(Integer id) {
+    public Pago findPago(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Abono.class, id);
+            return em.find(Pago.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getAbonoCount() {
+    public int getPagoCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Abono> rt = cq.from(Abono.class);
+            Root<Pago> rt = cq.from(Pago.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
