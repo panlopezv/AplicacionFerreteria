@@ -83,6 +83,11 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
         });
 
         botonCancelar.setText("Cancelar");
+        botonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCancelarActionPerformed(evt);
+            }
+        });
 
         botonAceptar.setText("Aceptar");
         botonAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -178,11 +183,18 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
                     }
                 }
             }
+            JOptionPane.showMessageDialog(this, "Creacion de Tipo de usuario exitosa.");
+            this.dispose();
         }
         else {
             JOptionPane.showMessageDialog(this, "Debe asignarle un valor a Tipo de usuario.");
         }
     }//GEN-LAST:event_botonAceptarActionPerformed
+
+    private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_botonCancelarActionPerformed
     
     private void cargarPermisos(){
         permisos= (new PermisoJpaController(Principal.conexion.getEmf())).findPermisoEntities();
