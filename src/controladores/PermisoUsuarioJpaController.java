@@ -38,25 +38,7 @@ public class PermisoUsuarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Permiso permisoid = permisoUsuario.getPermisoid();
-            if (permisoid != null) {
-                permisoid = em.getReference(permisoid.getClass(), permisoid.getId());
-                permisoUsuario.setPermisoid(permisoid);
-            }
-            TipoPersona tipoPersonaid = permisoUsuario.getTipoPersonaid();
-            if (tipoPersonaid != null) {
-                tipoPersonaid = em.getReference(tipoPersonaid.getClass(), tipoPersonaid.getId());
-                permisoUsuario.setTipoPersonaid(tipoPersonaid);
-            }
             em.persist(permisoUsuario);
-            if (permisoid != null) {
-                permisoid.getPermisoUsuarioList().add(permisoUsuario);
-                permisoid = em.merge(permisoid);
-            }
-            if (tipoPersonaid != null) {
-                tipoPersonaid.getPermisoUsuarioList().add(permisoUsuario);
-                tipoPersonaid = em.merge(tipoPersonaid);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -70,36 +52,7 @@ public class PermisoUsuarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            PermisoUsuario persistentPermisoUsuario = em.find(PermisoUsuario.class, permisoUsuario.getId());
-            Permiso permisoidOld = persistentPermisoUsuario.getPermisoid();
-            Permiso permisoidNew = permisoUsuario.getPermisoid();
-            TipoPersona tipoPersonaidOld = persistentPermisoUsuario.getTipoPersonaid();
-            TipoPersona tipoPersonaidNew = permisoUsuario.getTipoPersonaid();
-            if (permisoidNew != null) {
-                permisoidNew = em.getReference(permisoidNew.getClass(), permisoidNew.getId());
-                permisoUsuario.setPermisoid(permisoidNew);
-            }
-            if (tipoPersonaidNew != null) {
-                tipoPersonaidNew = em.getReference(tipoPersonaidNew.getClass(), tipoPersonaidNew.getId());
-                permisoUsuario.setTipoPersonaid(tipoPersonaidNew);
-            }
             permisoUsuario = em.merge(permisoUsuario);
-            if (permisoidOld != null && !permisoidOld.equals(permisoidNew)) {
-                permisoidOld.getPermisoUsuarioList().remove(permisoUsuario);
-                permisoidOld = em.merge(permisoidOld);
-            }
-            if (permisoidNew != null && !permisoidNew.equals(permisoidOld)) {
-                permisoidNew.getPermisoUsuarioList().add(permisoUsuario);
-                permisoidNew = em.merge(permisoidNew);
-            }
-            if (tipoPersonaidOld != null && !tipoPersonaidOld.equals(tipoPersonaidNew)) {
-                tipoPersonaidOld.getPermisoUsuarioList().remove(permisoUsuario);
-                tipoPersonaidOld = em.merge(tipoPersonaidOld);
-            }
-            if (tipoPersonaidNew != null && !tipoPersonaidNew.equals(tipoPersonaidOld)) {
-                tipoPersonaidNew.getPermisoUsuarioList().add(permisoUsuario);
-                tipoPersonaidNew = em.merge(tipoPersonaidNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -128,16 +81,6 @@ public class PermisoUsuarioJpaController implements Serializable {
                 permisoUsuario.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The permisoUsuario with id " + id + " no longer exists.", enfe);
-            }
-            Permiso permisoid = permisoUsuario.getPermisoid();
-            if (permisoid != null) {
-                permisoid.getPermisoUsuarioList().remove(permisoUsuario);
-                permisoid = em.merge(permisoid);
-            }
-            TipoPersona tipoPersonaid = permisoUsuario.getTipoPersonaid();
-            if (tipoPersonaid != null) {
-                tipoPersonaid.getPermisoUsuarioList().remove(permisoUsuario);
-                tipoPersonaid = em.merge(tipoPersonaid);
             }
             em.remove(permisoUsuario);
             em.getTransaction().commit();

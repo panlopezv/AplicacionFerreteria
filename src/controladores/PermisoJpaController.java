@@ -35,29 +35,11 @@ public class PermisoJpaController implements Serializable {
     }
 
     public void create(Permiso permiso) {
-        if (permiso.getPermisoUsuarioList() == null) {
-            permiso.setPermisoUsuarioList(new ArrayList<PermisoUsuario>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<PermisoUsuario> attachedPermisoUsuarioList = new ArrayList<PermisoUsuario>();
-            for (PermisoUsuario permisoUsuarioListPermisoUsuarioToAttach : permiso.getPermisoUsuarioList()) {
-                permisoUsuarioListPermisoUsuarioToAttach = em.getReference(permisoUsuarioListPermisoUsuarioToAttach.getClass(), permisoUsuarioListPermisoUsuarioToAttach.getId());
-                attachedPermisoUsuarioList.add(permisoUsuarioListPermisoUsuarioToAttach);
-            }
-            permiso.setPermisoUsuarioList(attachedPermisoUsuarioList);
             em.persist(permiso);
-            for (PermisoUsuario permisoUsuarioListPermisoUsuario : permiso.getPermisoUsuarioList()) {
-                Permiso oldPermisoidOfPermisoUsuarioListPermisoUsuario = permisoUsuarioListPermisoUsuario.getPermisoid();
-                permisoUsuarioListPermisoUsuario.setPermisoid(permiso);
-                permisoUsuarioListPermisoUsuario = em.merge(permisoUsuarioListPermisoUsuario);
-                if (oldPermisoidOfPermisoUsuarioListPermisoUsuario != null) {
-                    oldPermisoidOfPermisoUsuarioListPermisoUsuario.getPermisoUsuarioList().remove(permisoUsuarioListPermisoUsuario);
-                    oldPermisoidOfPermisoUsuarioListPermisoUsuario = em.merge(oldPermisoidOfPermisoUsuarioListPermisoUsuario);
-                }
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -71,40 +53,7 @@ public class PermisoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Permiso persistentPermiso = em.find(Permiso.class, permiso.getId());
-            List<PermisoUsuario> permisoUsuarioListOld = persistentPermiso.getPermisoUsuarioList();
-            List<PermisoUsuario> permisoUsuarioListNew = permiso.getPermisoUsuarioList();
-            List<String> illegalOrphanMessages = null;
-            for (PermisoUsuario permisoUsuarioListOldPermisoUsuario : permisoUsuarioListOld) {
-                if (!permisoUsuarioListNew.contains(permisoUsuarioListOldPermisoUsuario)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain PermisoUsuario " + permisoUsuarioListOldPermisoUsuario + " since its permisoid field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<PermisoUsuario> attachedPermisoUsuarioListNew = new ArrayList<PermisoUsuario>();
-            for (PermisoUsuario permisoUsuarioListNewPermisoUsuarioToAttach : permisoUsuarioListNew) {
-                permisoUsuarioListNewPermisoUsuarioToAttach = em.getReference(permisoUsuarioListNewPermisoUsuarioToAttach.getClass(), permisoUsuarioListNewPermisoUsuarioToAttach.getId());
-                attachedPermisoUsuarioListNew.add(permisoUsuarioListNewPermisoUsuarioToAttach);
-            }
-            permisoUsuarioListNew = attachedPermisoUsuarioListNew;
-            permiso.setPermisoUsuarioList(permisoUsuarioListNew);
             permiso = em.merge(permiso);
-            for (PermisoUsuario permisoUsuarioListNewPermisoUsuario : permisoUsuarioListNew) {
-                if (!permisoUsuarioListOld.contains(permisoUsuarioListNewPermisoUsuario)) {
-                    Permiso oldPermisoidOfPermisoUsuarioListNewPermisoUsuario = permisoUsuarioListNewPermisoUsuario.getPermisoid();
-                    permisoUsuarioListNewPermisoUsuario.setPermisoid(permiso);
-                    permisoUsuarioListNewPermisoUsuario = em.merge(permisoUsuarioListNewPermisoUsuario);
-                    if (oldPermisoidOfPermisoUsuarioListNewPermisoUsuario != null && !oldPermisoidOfPermisoUsuarioListNewPermisoUsuario.equals(permiso)) {
-                        oldPermisoidOfPermisoUsuarioListNewPermisoUsuario.getPermisoUsuarioList().remove(permisoUsuarioListNewPermisoUsuario);
-                        oldPermisoidOfPermisoUsuarioListNewPermisoUsuario = em.merge(oldPermisoidOfPermisoUsuarioListNewPermisoUsuario);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -133,17 +82,6 @@ public class PermisoJpaController implements Serializable {
                 permiso.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The permiso with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<PermisoUsuario> permisoUsuarioListOrphanCheck = permiso.getPermisoUsuarioList();
-            for (PermisoUsuario permisoUsuarioListOrphanCheckPermisoUsuario : permisoUsuarioListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Permiso (" + permiso + ") cannot be destroyed since the PermisoUsuario " + permisoUsuarioListOrphanCheckPermisoUsuario + " in its permisoUsuarioList field has a non-nullable permisoid field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(permiso);
             em.getTransaction().commit();

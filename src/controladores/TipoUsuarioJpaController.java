@@ -35,29 +35,11 @@ public class TipoUsuarioJpaController implements Serializable {
     }
 
     public void create(TipoUsuario tipoUsuario) {
-        if (tipoUsuario.getUsuarioList() == null) {
-            tipoUsuario.setUsuarioList(new ArrayList<Usuario>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
-            for (Usuario usuarioListUsuarioToAttach : tipoUsuario.getUsuarioList()) {
-                usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getId());
-                attachedUsuarioList.add(usuarioListUsuarioToAttach);
-            }
-            tipoUsuario.setUsuarioList(attachedUsuarioList);
             em.persist(tipoUsuario);
-            for (Usuario usuarioListUsuario : tipoUsuario.getUsuarioList()) {
-                TipoUsuario oldTipoUsuarioidOfUsuarioListUsuario = usuarioListUsuario.getTipoUsuarioid();
-                usuarioListUsuario.setTipoUsuarioid(tipoUsuario);
-                usuarioListUsuario = em.merge(usuarioListUsuario);
-                if (oldTipoUsuarioidOfUsuarioListUsuario != null) {
-                    oldTipoUsuarioidOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
-                    oldTipoUsuarioidOfUsuarioListUsuario = em.merge(oldTipoUsuarioidOfUsuarioListUsuario);
-                }
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -71,40 +53,7 @@ public class TipoUsuarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            TipoUsuario persistentTipoUsuario = em.find(TipoUsuario.class, tipoUsuario.getId());
-            List<Usuario> usuarioListOld = persistentTipoUsuario.getUsuarioList();
-            List<Usuario> usuarioListNew = tipoUsuario.getUsuarioList();
-            List<String> illegalOrphanMessages = null;
-            for (Usuario usuarioListOldUsuario : usuarioListOld) {
-                if (!usuarioListNew.contains(usuarioListOldUsuario)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Usuario " + usuarioListOldUsuario + " since its tipoUsuarioid field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
-            for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
-                usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getId());
-                attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
-            }
-            usuarioListNew = attachedUsuarioListNew;
-            tipoUsuario.setUsuarioList(usuarioListNew);
             tipoUsuario = em.merge(tipoUsuario);
-            for (Usuario usuarioListNewUsuario : usuarioListNew) {
-                if (!usuarioListOld.contains(usuarioListNewUsuario)) {
-                    TipoUsuario oldTipoUsuarioidOfUsuarioListNewUsuario = usuarioListNewUsuario.getTipoUsuarioid();
-                    usuarioListNewUsuario.setTipoUsuarioid(tipoUsuario);
-                    usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
-                    if (oldTipoUsuarioidOfUsuarioListNewUsuario != null && !oldTipoUsuarioidOfUsuarioListNewUsuario.equals(tipoUsuario)) {
-                        oldTipoUsuarioidOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
-                        oldTipoUsuarioidOfUsuarioListNewUsuario = em.merge(oldTipoUsuarioidOfUsuarioListNewUsuario);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -133,17 +82,6 @@ public class TipoUsuarioJpaController implements Serializable {
                 tipoUsuario.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The tipoUsuario with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Usuario> usuarioListOrphanCheck = tipoUsuario.getUsuarioList();
-            for (Usuario usuarioListOrphanCheckUsuario : usuarioListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This TipoUsuario (" + tipoUsuario + ") cannot be destroyed since the Usuario " + usuarioListOrphanCheckUsuario + " in its usuarioList field has a non-nullable tipoUsuarioid field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(tipoUsuario);
             em.getTransaction().commit();

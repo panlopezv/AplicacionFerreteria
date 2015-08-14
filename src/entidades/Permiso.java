@@ -37,13 +37,11 @@ public class Permiso implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(nullable = false)
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "Permiso")
+    @Column(nullable = false, length = 45)
     private String permiso;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "permisoid")
-    private List<PermisoUsuario> permisoUsuarioList;
 
     public Permiso() {
     }
@@ -72,16 +70,7 @@ public class Permiso implements Serializable {
     public void setPermiso(String permiso) {
         this.permiso = permiso;
     }
-
-    @XmlTransient
-    public List<PermisoUsuario> getPermisoUsuarioList() {
-        return permisoUsuarioList;
-    }
-
-    public void setPermisoUsuarioList(List<PermisoUsuario> permisoUsuarioList) {
-        this.permisoUsuarioList = permisoUsuarioList;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

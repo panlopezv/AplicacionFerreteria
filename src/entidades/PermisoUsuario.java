@@ -28,26 +28,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PermisoUsuario.findAll", query = "SELECT p FROM PermisoUsuario p"),
-    @NamedQuery(name = "PermisoUsuario.findById", query = "SELECT p FROM PermisoUsuario p WHERE p.id = :id")})
+    @NamedQuery(name = "PermisoUsuario.findById", query = "SELECT p FROM PermisoUsuario p WHERE p.id = :id"),
+    @NamedQuery(name = "PermisoUsuario.findByPermisoid", query = "SELECT p FROM PermisoUsuario p WHERE p.permisoid = :archivoid"),
+    @NamedQuery(name = "PermisoUsuario.findByTipopersonaid", query = "SELECT p FROM PermisoUsuario p WHERE p.tipoPersonaid = :tipoPersonaid")})
 public class PermisoUsuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(nullable = false)
     private Integer id;
-    @JoinColumn(name = "Permiso_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Permiso permisoid;
-    @JoinColumn(name = "Tipo_Persona_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private TipoPersona tipoPersonaid;
+    @Basic(optional = false)
+    @Column(name = "Permiso_id", nullable = false)
+    private int permisoid;
+    @Basic(optional = false)
+    @Column(name = "Tipo_Persona_id", nullable = false)
+    private int tipoPersonaid;
 
     public PermisoUsuario() {
     }
 
-    public PermisoUsuario(Integer id) {
+    public PermisoUsuario(Integer id, Integer permisoid, Integer tipopersonaid) {
         this.id = id;
+        this.permisoid = permisoid;
+        this.tipoPersonaid = tipopersonaid;
     }
 
     public Integer getId() {
@@ -58,19 +62,19 @@ public class PermisoUsuario implements Serializable {
         this.id = id;
     }
 
-    public Permiso getPermisoid() {
+    public int getPermisoid() {
         return permisoid;
     }
 
-    public void setPermisoid(Permiso permisoid) {
+    public void setPermisoid(int permisoid) {
         this.permisoid = permisoid;
     }
 
-    public TipoPersona getTipoPersonaid() {
+    public int getTipoPersonaid() {
         return tipoPersonaid;
     }
 
-    public void setTipoPersonaid(TipoPersona tipoPersonaid) {
+    public void setTipoPersonaid(int tipoPersonaid) {
         this.tipoPersonaid = tipoPersonaid;
     }
 
@@ -93,7 +97,6 @@ public class PermisoUsuario implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entidades.PermisoUsuario[ id=" + id + " ]";
