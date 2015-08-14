@@ -5,6 +5,9 @@
  */
 package proyectoferreteria;
 
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Pablo
@@ -103,6 +106,26 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
 
     private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
         // TODO add your handling code here:
+        JCheckBox modulo1=new JCheckBox("Modulo 1");
+        JCheckBox modulo2=new JCheckBox("Modulo 2");
+        JCheckBox modulo3=new JCheckBox("Modulo 3");
+        JCheckBox modulo4=new JCheckBox("Modulo 4");
+        JCheckBox modulo5=new JCheckBox("Modulo 5");
+        Object[] permisos={
+            modulo1,
+            modulo2,
+            modulo3,
+            modulo4,
+            modulo5,
+        };
+        int opcion = JOptionPane.showConfirmDialog(this, permisos, "Selección de permisos.", JOptionPane.OK_CANCEL_OPTION);
+        if (opcion == JOptionPane.OK_OPTION) {  
+            if(modulo1.isSelected()==Boolean.TRUE){
+                JOptionPane.showMessageDialog(this, "Se ha seleccionado el modulo 1.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun permiso.");
+        }
     }//GEN-LAST:event_botonModificarActionPerformed
 
 

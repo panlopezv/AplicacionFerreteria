@@ -5,11 +5,13 @@
  */
 package conexion;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -20,16 +22,17 @@ public class ConexionJPA {
     private EntityManager em;
     private EntityManagerFactory emf;
     private static ConexionJPA instancia;
-    private Map prop = new HashMap();
+    private Map prop;
     
-    public static ConexionJPA getInstance(String user,String pass) throws Exception{
+    public static ConexionJPA getInstance(String user,String pass) throws Exception {
         if(instancia==null){
             instancia = new ConexionJPA(user,pass);
         }
         return instancia;   
     }
 
-    private ConexionJPA(String user,String pass) {
+    private ConexionJPA(String user,String pass) throws Exception {
+        prop = new HashMap();
         prop.put("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/ferreteriadeleon");
         prop.put("javax.persistence.jdbc.password", pass);
         prop.put("javax.persistence.jdbc.user", user);
@@ -46,9 +49,9 @@ public class ConexionJPA {
     }
     
     public void close() {
-        this.em=null;
-        this.emf=null;
-        this.prop= null;
-        ConexionJPA.instancia=null;
+        em=null;
+        emf=null;
+        prop= null;
+        instancia=null;
     }
 }

@@ -8,9 +8,9 @@ package clases;
 import controladores.PermisoJpaController;
 import controladores.PermisoUsuarioJpaController;
 import entidades.Permiso;
-import ferreteriadl.Principal;
 import java.util.List;
 import javax.persistence.Query;
+import proyectoferreteria.Principal;
 
 /**
  *

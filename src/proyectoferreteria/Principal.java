@@ -6,12 +6,14 @@
 package proyectoferreteria;
 
 import conexion.ConexionJPA;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -47,7 +49,6 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -121,14 +122,6 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
-        jMenuItem5.setText("Probar");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem5);
-
         jMenuItem4.setText("Cerrar sesión");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,14 +183,13 @@ public class Principal extends javax.swing.JFrame {
             "Contraseña:", pass
         };
         int opcion = JOptionPane.showConfirmDialog(this, message, "Inicio de sesión.", JOptionPane.OK_CANCEL_OPTION);
-        if (opcion == JOptionPane.OK_OPTION) {   
+        if (opcion == JOptionPane.OK_OPTION) {  
             try {
                 conexion=ConexionJPA.getInstance(user.getText(), pass.getText());
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
             } catch (Exception ex) {
-                //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrecta.");
-            }         
+                JOptionPane.showMessageDialog(this, "Usuario y/o contraseña inválida(s)."); 
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Inicio de sesión cancelado.");
         }
@@ -207,6 +199,7 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(conexion!=null){
             conexion.close();
+            conexion=null;
         }
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -215,6 +208,7 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(conexion!=null){
             conexion.close();
+            conexion=null;
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -222,32 +216,9 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(conexion!=null){
             conexion.close();
+            conexion=null;
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
-        JCheckBox modulo1=new JCheckBox("Modulo 1");
-        JCheckBox modulo2=new JCheckBox("Modulo 2");
-        JCheckBox modulo3=new JCheckBox("Modulo 3");
-        JCheckBox modulo4=new JCheckBox("Modulo 4");
-        JCheckBox modulo5=new JCheckBox("Modulo 5");
-        Object[] permisos={
-            modulo1,
-            modulo2,
-            modulo3,
-            modulo4,
-            modulo5,
-        };
-        int opcion = JOptionPane.showConfirmDialog(this, permisos, "Selección de permisos.", JOptionPane.OK_CANCEL_OPTION);
-        if (opcion == JOptionPane.OK_OPTION) {  
-            if(modulo1.isSelected()==Boolean.TRUE){
-                JOptionPane.showMessageDialog(this, "Se ha seleccionado el modulo 1.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun permiso.");
-        }
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,7 +269,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
