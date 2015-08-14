@@ -1,0 +1,12 @@
+/*Trigger para validar o invalidar la serie de una factura*/
+Delimiter //
+Drop Trigger if exists actualizarNumeroSiguiente//
+Create Trigger actualizarNumeroSiguiente
+Before Update on Numero
+For Each Row
+Begin
+if new.siguiente > old.rangof then
+	set new.valido = false;
+end if;
+End//
+      

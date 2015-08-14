@@ -1,0 +1,31 @@
+Modulos a trabajar.
+Conexion
+	Singleton
+	
+Ventas
+	Carro de venta
+	crear venta
+Mike
+Compras
+	acceso a modulo producto
+	registrar compra
+	finalizar compra
+	generar comprobante compra
+	
+Contabilidad
+	balance general
+	calcular iva's
+Mike
+Producto
+	crear, modificar, eliminar: producto, categoria, presentacion, producto-sucursal
+Pablo
+Login
+	iniciar sesion
+	mostrar principal
+Pablo
+administrativo
+	crear, modificar, eliminar, ver: usuarios, personas, sucursal, tipo persona, permisos tipo usuario
+	
+Facturacion
+	generar comprobante venta
+	finalizar venta
