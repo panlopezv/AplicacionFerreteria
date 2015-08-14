@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "producto", catalog = "ferreteriadeleon", schema = "")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "Producto.findMaxId", query = "SELECT MAX(p.id) FROM Producto p"),
     @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
     @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.id = :id"),
     @NamedQuery(name = "Producto.findByMarca", query = "SELECT p FROM Producto p WHERE p.marca = :marca"),

@@ -66,6 +66,10 @@ public class Productos {
         cSucursal= new SucursalJpaController((conexion.getEmf()));
 
     }
+    
+    /**
+     * Limpia todas las referencias de un producto.
+     */
     public void Limpiar() {
         categoria = new Categoria();
         producto = new Producto();
@@ -75,7 +79,13 @@ public class Productos {
         pSucursal = new ProductoSucursal();
 
     }
-
+    
+    /**
+     * 
+     * @param Id 
+     * 
+     * Recibe el id para referenciar  un categoria, no retorna datos ya que en esta estructura la guarda
+     */
     public void buscarCategoria(int Id) {
         categoria = cCategoria.findCategoria(Id);
         if (categoria == null) {
@@ -83,12 +93,18 @@ public class Productos {
         }
 
     }
-    public void buscarCategoria(String Id) {
+    /**
+     * 
+     * @param Categoria, tipo String
+     * 
+     * Recibe el id para referenciar  un categoria, no retorna datos ya que en esta estructura la guarda
+     */
+    public void buscarCategoria(String Categoria) {
         
         Query q;
         EntityManager em = conexion.getEm();
         q = em.createNamedQuery("Categoria.findByCategoria");
-        q.setParameter("categoria", Id);
+        q.setParameter("categoria", Categoria);
         
         categoria= (Categoria) q.getResultList().get(0);
         if (categoria == null) {

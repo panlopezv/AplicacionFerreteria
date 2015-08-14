@@ -64,6 +64,13 @@ public class CrearProducto {
     public void setSucursal(ArrayList<Sucursal> sucursal) {
         this.sucursal = sucursal;
     }
+    public void setSucursal(List<ProductoSucursal> ps){
+        for(ProductoSucursal psa: ps){
+            sucursal.add(psa.getSucursalid());
+            
+        }
+        
+    }
 
     public void setCategoria(String c) {
         productos.buscarCategoria(c);
@@ -169,13 +176,15 @@ public class CrearProducto {
                         var = false;
 
                     }
+                    System.out.println(su.getId()+" "+s.getId());
                 }
 
                 if (var) {
                     Suc[j] = "Sucursal " + su.getId();
+                    
                     j++;
                 }
-                var = false;
+                var = true;
 
             }
 
@@ -211,8 +220,8 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
-            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
-            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
+            Pattern n = Pattern.compile("[0-9]+[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]+[0-9]*?\\.?[0-9]*$");
 
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Producto",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -230,6 +239,8 @@ public class CrearProducto {
                         field2.setText("");
 
                     } else {
+                        
+                        System.out.println(m.matches()+" "+m2.matches());
 
                         //para que lo guarde la primera vez
                         if (var2) {
@@ -257,6 +268,7 @@ public class CrearProducto {
 
                             } else {
                                 var = false;
+                                ((JInternalFrame) c).dispose();
 
                             }
                         }else{
@@ -308,13 +320,13 @@ public class CrearProducto {
             if (result == JOptionPane.OK_OPTION) {
                 Matcher m = n.matcher(field1.getText());
                 Matcher m2 = n2.matcher(field2.getText());
-                if (!m.matches()) {
+                if (!m.matches()&&field1.getText().compareTo("")==0) {
                     //valida cantidad
                     JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
                     field1.setText("");
 
                 } else {
-                    if (!m2.matches()) {
+                    if (!m2.matches()&&field2.getText().compareTo("")==0) {
                         JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
                         field2.setText("");
 
@@ -370,7 +382,6 @@ public class CrearProducto {
 
     public void nuevaSucursal(Component c) {
         boolean var = true;
-
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
@@ -383,8 +394,8 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
-            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
-            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
+            Pattern n = Pattern.compile("?[0-9]*$");
+            Pattern n2 = Pattern.compile("?[0-9]*\\.?[0-9]*$");
             if (getsinSucursal().length > 0) {
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Sucursal",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -393,13 +404,13 @@ public class CrearProducto {
 
                     Matcher m = n.matcher(field1.getText());
                     Matcher m2 = n2.matcher(field2.getText());
-                    if (!m.matches()) {
+                    if (!m.matches()&&field1.getText().compareTo("")==0) {
                         //valida cantidad
                         JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
                         field1.setText("");
 
                     } else {
-                        if (!m2.matches()) {
+                        if (!m2.matches()&&field2.getText().compareTo("")==0) {
                             JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
                             field2.setText("");
 
