@@ -203,9 +203,10 @@ public class Principal extends javax.swing.JFrame {
         if (opcion == JOptionPane.OK_OPTION) {  
             try {
                 conexion=ConexionJPA.getInstance(user.getText(), pass.getText());
+                JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso."); 
             } catch (Exception ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-//                JOptionPane.showMessageDialog(this, "Usuario y/o contraseña inválida(s)."); 
+                JOptionPane.showMessageDialog(this, "Usuario y/o contraseña inválida(s)."); 
             }
         } else {
             JOptionPane.showMessageDialog(this, "Inicio de sesión cancelado.");

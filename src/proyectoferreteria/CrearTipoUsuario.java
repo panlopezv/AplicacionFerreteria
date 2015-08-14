@@ -174,7 +174,7 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
             for(int i=0;i<permisosUsuario.size();i++){
                 for(int j=0;j<permisos.size();j++){
                     if(permisosUsuario.get(i).compareTo(permisos.get(j).getPermiso())==0){
-                        controladorPU.create(new PermisoUsuario(0,j,id));
+                       // controladorPU.create(new PermisoUsuario(0,1,id));
                     }
                 }
             }

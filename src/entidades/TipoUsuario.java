@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoUsuario.findAll", query = "SELECT t FROM TipoUsuario t"),
-    @NamedQuery(name = "TipoUsuario.MaxId", query = "SELECT MAX(t.id) FROM TipoUsuario t"),
     @NamedQuery(name = "TipoUsuario.findById", query = "SELECT t FROM TipoUsuario t WHERE t.id = :id"),
     @NamedQuery(name = "TipoUsuario.findByTipo", query = "SELECT t FROM TipoUsuario t WHERE t.tipo = :tipo")})
 public class TipoUsuario implements Serializable {
@@ -38,11 +37,13 @@ public class TipoUsuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(nullable = false, length = 45)
+    @Column(name = "Tipo")
     private String tipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuarioid")
+    private List<Usuario> usuarioList;
 
     public TipoUsuario() {
     }
@@ -72,6 +73,15 @@ public class TipoUsuario implements Serializable {
         this.tipo = tipo;
     }
 
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -91,6 +101,7 @@ public class TipoUsuario implements Serializable {
         }
         return true;
     }
+
     @Override
     public String toString() {
         return "entidades.TipoUsuario[ id=" + id + " ]";
