@@ -10,15 +10,12 @@ import controladores.AbonoJpaController;
 import controladores.CompraJpaController;
 import controladores.DetalleCompraJpaController;
 import controladores.PersonaJpaController;
-import controladores.TelefonoJpaController;
-import controladores.TelefonoPersonaJpaController;
 import entidades.Abono;
 import entidades.Compra;
 import entidades.DetalleCompra;
 import entidades.ModoPago;
 import entidades.Persona;
 import entidades.Sucursal;
-import entidades.TelefonoPersona;
 import entidades.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,14 +28,12 @@ import javax.xml.soap.Detail;
 public abstract class ACompra {
     protected CompraJpaController cCompra;
     protected DetalleCompraJpaController cDetalle;
-
     protected PersonaJpaController cPersona;
-    protected TelefonoJpaController CTelefono;
-    protected TelefonoPersonaJpaController cTelefonoP;
-
+    protected AbonoJpaController cAbono;
+    
+    
     protected ArrayList<Abono> abonos;
 
-    protected AbonoJpaController cAbono;
 
     protected ConexionJPA conexion;
     protected Persona persona;

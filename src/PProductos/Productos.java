@@ -201,6 +201,14 @@ public class Productos {
         }
 
     }
+    public List<ProductoPresentacion> buscarProductoP(String codigo) {
+         Query q;
+        EntityManager em = conexion.getEm();
+        q = em.createNamedQuery("ProductoPresentacion.findByCodigo");
+        q.setParameter("codigo", codigo);
+        return q.getResultList();
+
+    }
 
     public void crearProductoP() {
         String codigo = getCategoria().getId() + "" + getProducto().getId() + "" + getPresentacion().getId();

@@ -106,7 +106,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
-        jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
@@ -131,7 +130,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
         jButton9 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
-        jDialog1.setMaximumSize(new java.awt.Dimension(538, 272));
         jDialog1.setMinimumSize(new java.awt.Dimension(538, 272));
         jDialog1.setModal(true);
         jDialog1.setResizable(false);
@@ -267,13 +265,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
             }
         });
 
-        jButton10.setText("Agregar Nuevo Producto");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
         jButton11.setText("Cancelar");
 
         jButton12.setText("Aceptar");
@@ -305,8 +296,7 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
                                 .addComponent(jRadioButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                                .addComponent(jButton10))))
+                                .addGap(0, 182, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton12)
@@ -327,7 +317,7 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
         jDialog2Layout.setVerticalGroup(
             jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog2Layout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+                .addContainerGap(54, Short.MAX_VALUE)
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog2Layout.createSequentialGroup()
                         .addComponent(jLabel9)
@@ -342,7 +332,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
                                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton10)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jRadioButton1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -666,7 +655,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
 
         jDialog1.setLocation(this.getX(), this.getY() + 100);
         jDialog1.show();
-        tipoAccion=nPresentacion;
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -692,6 +680,7 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
             Producto p = modelo.getProducto(jTable1.getSelectedRow());
 
             cp.setProducto(p);
+            cp.setCategoria(p.getCategoriaid().getCategoria());
 
             jComboBox1.removeAllItems();
             jComboBox1.addItem(p.getCategoriaid().getCategoria());
@@ -710,7 +699,8 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
             jTextArea1.setEditable(false);
             jLabel8.setForeground(Color.red);
             jLabel8.setText("<html><body>Por defecto se seleccionara el primero de la Lista,<br> cambie si desa otra Presentacion</body></html>");
-
+            
+            tipoAccion=nPresentacion;
         } else {
             JOptionPane.showMessageDialog(this, "No selecciono un producto");
         }
@@ -806,12 +796,8 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(cp.getCategorias()));
         jDialog2.setLocation((this.getX() + this.getParent().getX()) / 2, ((this.getY() + this.getParent().getY()) / 2) + 100);
         jDialog2.show();
-        tipoAccion=nSucursales;
+      
     }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
@@ -873,7 +859,7 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
             jTextField1.setEditable(false);
             jTextField2.setEditable(false);
             jTextArea1.setEditable(false);
-            
+            tipoAccion=nSucursales;
        
             
         }else{
@@ -891,22 +877,24 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
    
     private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
         // TODO add your handling code here:
-        if( jRadioButton3.isSelected()){
-            if(jRadioButton1.isSelected()){
-                modelo2 = new ModeloTablaProductoProducto(cp.BusquedaP(jTextField4.getText() + "%", (String) jComboBox3.getSelectedItem())); 
-               jTable3.setModel(modelo2);
-                
-            }else{
-               modelo2 = new ModeloTablaProductoProducto(cp.BusquedaP(jTextField4.getText() + "%")); 
-               jTable3.setModel(modelo2);
+        if (jRadioButton3.isSelected()) {
+            if (jRadioButton1.isSelected()) {
+                modelo2 = new ModeloTablaProductoProducto(cp.BusquedaP(jTextField4.getText() + "%", (String) jComboBox3.getSelectedItem()));
+                jTable3.setModel(modelo2);
+
+            } else {
+                modelo2 = new ModeloTablaProductoProducto(cp.BusquedaP(jTextField4.getText() + "%"));
+                jTable3.setModel(modelo2);
             }
-            
-     
+
         }
-        if(jRadioButton2.isSelected()){
+        if (jRadioButton2.isSelected()) {
+            modelo2 = new ModeloTablaProductoProducto(cp.busquedaporCodigo(jTextField4.getText() + "%"));
+                jTable3.setModel(modelo2);
             
+
         }
-        
+
     }//GEN-LAST:event_jTextField4KeyTyped
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
@@ -923,7 +911,6 @@ public class Nuevo extends javax.swing.JInternalFrame implements KeyListener{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;

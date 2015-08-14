@@ -7,9 +7,8 @@ package Compras;
 
 
 
-import entidades.Producto;
+import entidades.ProductoPresentacion;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -18,27 +17,26 @@ import javax.swing.table.AbstractTableModel;
  */
 public class ModeloTablaProducto2 extends AbstractTableModel {
    
-    private String columnas[] = {"Nombre","Marca", "Descripcion"};
-    List<Producto> productos;
+    private String columnas[] = {"Codigo","Nombre","Marca","Categoria","Sucursal","Precio","Cantidad"};
+    ArrayList<ItemProducto> Items;
 
-    public ModeloTablaProducto2(List<Producto> p) {
+    public ModeloTablaProducto2(ArrayList<ItemProducto> items) {
        
-      this.productos=p;
+      this.Items=items;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public ArrayList<ItemProducto> getProductos() {
+        return Items;
     }
     
-    public Producto getProducto(int n) {
-        System.out.println(productos.size());
-        return productos.get(n);
+    public ProductoPresentacion getProducto(int n) {
+        return Items.get(n).getPp();
     }
     
     
     @Override
     public int getRowCount() {
-        return productos.size();
+        return Items.size();
     }
 
     @Override
@@ -48,13 +46,16 @@ public class ModeloTablaProducto2 extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Producto a= this.productos.get(rowIndex);
+        ItemProducto a= this.Items.get(rowIndex);
         
         switch(columnIndex){
-            case 0: return a.getNombre();
-            case 1: return a.getMarca();
-            case 2: return a.getDescripcion();
-            case 3: return a.getId();
+            case 0: return a.getCodigo();
+            case 1: return a.getNombre();
+            case 2: return a.getMarca();
+            case 3: return a.getCategoria();
+            case 4: return a.getSucursal();
+            case 5: return a.getPrecio();
+            case 6: return a.getCantidad();    
                 
             
             default: return null;

@@ -6,6 +6,8 @@
 package PProductos;
 
 import conexion.ConexionJPA;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,12 +25,17 @@ public class p extends javax.swing.JFrame {
         jDesktopPane1.add(nuevo);
     }
     public p() {
-        initComponents();
-         ConexionJPA conexion =  ConexionJPA.getInstance("root","root");
-        Nuevo nuevo= new Nuevo(conexion);
-        nuevo.show();
-        jDesktopPane1.add(nuevo);
+        try {
+            initComponents();
+            ConexionJPA conexion =  ConexionJPA.getInstance("root","root");
+            Nuevo nuevo= new Nuevo(conexion);
+            nuevo.show();
+            jDesktopPane1.add(nuevo);
+        } catch (Exception ex) {
+            Logger.getLogger(p.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -102,6 +109,9 @@ public class p extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(p.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

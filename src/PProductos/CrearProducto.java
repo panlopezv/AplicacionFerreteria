@@ -17,6 +17,8 @@ import java.awt.GridLayout;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -196,7 +198,7 @@ public class CrearProducto {
     public void nuevoProducto(Producto p, Component c) {
 
         boolean var = true;
-        boolean var2= true;
+        boolean var2 = true;
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
@@ -209,35 +211,63 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
+            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
+
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Producto",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                if (var2) {
+                Matcher m = n.matcher(field1.getText());
+                Matcher m2 = n2.matcher(field2.getText());
+                if (!m.matches()) {
+                    //valida cantidad
+                    JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
+                    field1.setText("");
 
-                    productos.crearProducto(p);
-                    productos.crearProductoP();
-                    var2 = false;
-                }
-                Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
-
-                ProductoSucursal ps = new ProductoSucursal();
-                ps.setExistencias(Integer.parseInt(field1.getText()));
-                ps.setPrecio(Integer.parseInt(field2.getText()));
-                ps.setSucursalid(s);
-                sucursal.add(s);
-
-                productos.CrearProductoSucursal(ps);
-                result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                if (result == JOptionPane.OK_OPTION) {
-                    var = true;
-                    if (getsinSucursal().length < 0) {
-                        var = false;
-                    }
                 } else {
-                    var = false;
+                    if (!m2.matches()) {
+                        JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
+                        field2.setText("");
 
+                    } else {
+
+                        //para que lo guarde la primera vez
+                        if (var2) {
+
+                            productos.crearProducto(p);
+                            productos.crearProductoP();
+                            var2 = false;
+                        }
+                        Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
+
+                        ProductoSucursal ps = new ProductoSucursal();
+                        ps.setExistencias(Integer.parseInt(field1.getText()));
+                        ps.setPrecio(Double.parseDouble(field2.getText()));
+                        ps.setSucursalid(s);
+                        sucursal.add(s);
+
+                        productos.CrearProductoSucursal(ps);
+                        if (getsinSucursal().length > 0) {
+
+                            result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                            if (result == JOptionPane.OK_OPTION) {
+                                var = true;
+
+                            } else {
+                                var = false;
+
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(c, "No existe Otra sucursal");
+                            var= false;
+                            ((JInternalFrame) c).dispose();
+                        
+                            
+                        }
+
+                    }
                 }
 
             } else {
@@ -256,7 +286,7 @@ public class CrearProducto {
 
     public void nuevaPresentacion(Component c) {
         boolean var = true;
-        boolean var2= true;
+        boolean var2 = true;
         productos.crearProductoP();
         do {
             String[] items = getsinSucursal();
@@ -270,34 +300,58 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
+            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Presentacion",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
             if (result == JOptionPane.OK_OPTION) {
-                if(var2){
-                    var2=false;
-                }
+                Matcher m = n.matcher(field1.getText());
+                Matcher m2 = n2.matcher(field2.getText());
+                if (!m.matches()) {
+                    //valida cantidad
+                    JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
+                    field1.setText("");
 
-                Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
-
-                ProductoSucursal ps = new ProductoSucursal();
-                ps.setExistencias(Integer.parseInt(field1.getText()));
-                ps.setPrecio(Integer.parseInt(field2.getText()));
-                ps.setSucursalid(s);
-                sucursal.add(s);
-
-                productos.CrearProductoSucursal(ps);
-                result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                if (result == JOptionPane.OK_OPTION) {
-                    var = true;
-                    if (getsinSucursal().length < 0) {
-                        var = false;
-                    }
                 } else {
-                    var=false;
-                    
+                    if (!m2.matches()) {
+                        JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
+                        field2.setText("");
 
+                    } else {
+                        if (var2) {
+                            var2 = false;
+                        }
+
+                        Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
+
+                        ProductoSucursal ps = new ProductoSucursal();
+                        ps.setExistencias(Integer.parseInt(field1.getText()));
+                        ps.setPrecio(Integer.parseInt(field2.getText()));
+                        ps.setSucursalid(s);
+                        sucursal.add(s);
+
+                        productos.CrearProductoSucursal(ps);
+                        if (getsinSucursal().length > 0) {
+
+                            result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                            if (result == JOptionPane.OK_OPTION) {
+                                var = true;
+
+                            } else {
+                                var = false;
+
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(c, "No existe Otra sucursal");
+                            var = false;
+                            ((JInternalFrame) c).dispose();
+
+                        }
+
+                    }
                 }
 
             } else {
@@ -316,7 +370,7 @@ public class CrearProducto {
 
     public void nuevaSucursal(Component c) {
         boolean var = true;
-        
+
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
@@ -329,41 +383,67 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
+            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
+            if (getsinSucursal().length > 0) {
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Sucursal",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-
-                Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
-
-                ProductoSucursal ps = new ProductoSucursal();
-                ps.setExistencias(Integer.parseInt(field1.getText()));
-                ps.setPrecio(Integer.parseInt(field2.getText()));
-                ps.setSucursalid(s);
-                sucursal.add(s);
-
-                productos.CrearProductoSucursal(ps);
-                result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
+            
                 if (result == JOptionPane.OK_OPTION) {
-                    var = true;
-                    if (getsinSucursal().length < 0) {
-                        var = false;
+
+                    Matcher m = n.matcher(field1.getText());
+                    Matcher m2 = n2.matcher(field2.getText());
+                    if (!m.matches()) {
+                        //valida cantidad
+                        JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
+                        field1.setText("");
+
+                    } else {
+                        if (!m2.matches()) {
+                            JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
+                            field2.setText("");
+
+                        } else {
+
+                            Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
+
+                            ProductoSucursal ps = new ProductoSucursal();
+                            ps.setExistencias(Integer.parseInt(field1.getText()));
+                            ps.setPrecio(Double.parseDouble(field2.getText()));
+                            ps.setSucursalid(s);
+                            sucursal.add(s);
+
+                            productos.CrearProductoSucursal(ps);
+
+                            result = JOptionPane.showConfirmDialog(c, "Existe otra sucursal con este producto?, pulse aceptar, si no solo cancelar", "Mensaje",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                            if (result == JOptionPane.OK_OPTION) {
+                                var = true;
+
+                            } else {
+                                var = false;
+
+                            }
+
+                        }
                     }
+
                 } else {
-                    var = false;
-
+                    result = JOptionPane.showConfirmDialog(c, "Desea Cancelar", "Mensaje",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.CLOSED_OPTION);
+                    if (JOptionPane.OK_OPTION == result) {
+                        ((JInternalFrame) c).dispose();
+                        var = false;
+                    } else {
+                        var = true;
+                    }
                 }
-
             } else {
-                result = JOptionPane.showConfirmDialog(c, "Desea Cancelar", "Mensaje",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.CLOSED_OPTION);
-                if (JOptionPane.OK_OPTION == result) {
-                    ((JInternalFrame) c).dispose();
-                    var = false;
-                } else {
-                    var = true;
-                }
+                JOptionPane.showMessageDialog(c, "No existe Otra sucursal");
+                var = false;
+                ((JInternalFrame) c).dispose();
+
             }
         } while (var);
 
@@ -418,6 +498,26 @@ public class CrearProducto {
         }
         return clasep;
 
+    }
+    
+    public ArrayList<ClaseProducto> busquedaporCodigo(String n){
+         ArrayList<ClaseProducto> clasep = new ArrayList<>();
+        List<ProductoPresentacion> p = productos.buscarProductoP(n);
+        
+        for(ProductoPresentacion pp:p){
+            ClaseProducto cp= new ClaseProducto();
+            cp.setCategoria(pp.getProductoid().getCategoriaid().getCategoria());
+            cp.setDescripcion(pp.getProductoid().getDescripcion());
+            cp.setCodigo(pp.getCodigo());
+            cp.setMarca(pp.getProductoid().getMarca());
+            cp.setNombre(pp.getProductoid().getNombre());
+            cp.setPp(pp);
+            cp.setPresentacion(pp.getPresentacionid().getPresentacion());
+            clasep.add(cp);
+            
+        }
+        return clasep;
+        
     }
 
 }

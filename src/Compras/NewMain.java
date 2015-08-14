@@ -14,9 +14,10 @@ import entidades.Categoria;
 import entidades.Persona;
 import entidades.Presentacion;
 import entidades.Producto;
-import entidades.Telefono;
 import entidades.TipoPersona;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Diaz
@@ -27,22 +28,26 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
-        
-        ConexionJPA conexion =  ConexionJPA.getInstance("root","root");
-       
+        try {
+            // TODO code application logic here
+            
+            
+            ConexionJPA conexion =  ConexionJPA.getInstance("root","root");
+            
 //        Productos productos= new Productos(conexion, 1);
 //        productos.crearCategoria(new Categoria(0, "picsinas"));
 //        productos.crearProducto((new Producto(0, "Cruz Roja", "Cemento")));
-//        
-//        
-        
-        NuevaCompra NUEVA = new NuevaCompra(null, null, conexion);
-        
-      
-        compras com= new compras(null, null, conexion);
-        com.setVisible(true);
+//
+//
+            
+            NuevaCompra NUEVA = new NuevaCompra(null, null, conexion);
+            
+            
+            compras com= new compras(null, null, conexion);
+            com.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(NewMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
        
         
