@@ -5,13 +5,13 @@
  */
 package conexion;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -24,11 +24,17 @@ public class ConexionJPA {
     private static ConexionJPA instancia;
     private Map prop;
     
-    public static ConexionJPA getInstance(String user,String pass) throws Exception {
-        if(instancia==null){
-            instancia = new ConexionJPA(user,pass);
-        }
-        return instancia;   
+    public static ConexionJPA getInstance(String user,String pass) {
+ 
+        if (instancia == null) {
+            try {
+                instancia = new ConexionJPA(user, pass);
+            } catch (Exception ex) {
+                //Logger.getLogger(ConexionJPA.class.getName()).log(Level.SEVERE, null, ex);
+                instancia = null;
+            }
+        }   
+        return instancia;
     }
 
     private ConexionJPA(String user,String pass) throws Exception {
@@ -49,6 +55,9 @@ public class ConexionJPA {
     }
     
     public void close() {
+        em.close();
+        emf.close();
+        prop.clear();
         em=null;
         emf=null;
         prop= null;

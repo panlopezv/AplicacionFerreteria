@@ -22,12 +22,12 @@ import javax.swing.JOptionPane;
  *
  * @author Pablo
  */
-public class TiposUsuario extends javax.swing.JInternalFrame {
+public class PrincipalTipoUsuario extends javax.swing.JInternalFrame {
     private TipoUsuarioJpaController controladorTU;
     /**
      * Creates new form VertTipoUsuario
      */
-    public TiposUsuario() {
+    public PrincipalTipoUsuario() {
         initComponents();
         initComponents();
         setIconifiable(Boolean.TRUE);
@@ -188,7 +188,7 @@ public class TiposUsuario extends javax.swing.JInternalFrame {
                 controladorTU.destroy(((ModeloTablaTiposUsuario) tablaTipos.getModel()).getTiposUsuario().get(fila).getId());
                 JOptionPane.showMessageDialog(this, "Eliminacion de tipo de usuario realizada con exito.");
             } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                Logger.getLogger(TiposUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PrincipalTipoUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
             }
         } else {
