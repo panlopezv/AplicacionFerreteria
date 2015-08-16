@@ -13,7 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entidades.Permiso;
 import entidades.PermisoUsuario;
-import entidades.TipoPersona;
+import entidades.TipoUsuario;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,19 +43,19 @@ public class PermisoUsuarioJpaController implements Serializable {
                 permisoid = em.getReference(permisoid.getClass(), permisoid.getId());
                 permisoUsuario.setPermisoid(permisoid);
             }
-            TipoPersona tipoPersonaid = permisoUsuario.getTipoPersonaid();
-            if (tipoPersonaid != null) {
-                tipoPersonaid = em.getReference(tipoPersonaid.getClass(), tipoPersonaid.getId());
-                permisoUsuario.setTipoPersonaid(tipoPersonaid);
+            TipoUsuario tipoUsuarioid = permisoUsuario.getTipoUsuarioid();
+            if (tipoUsuarioid != null) {
+                tipoUsuarioid = em.getReference(tipoUsuarioid.getClass(), tipoUsuarioid.getId());
+                permisoUsuario.setTipoUsuarioid(tipoUsuarioid);
             }
             em.persist(permisoUsuario);
             if (permisoid != null) {
                 permisoid.getPermisoUsuarioList().add(permisoUsuario);
                 permisoid = em.merge(permisoid);
             }
-            if (tipoPersonaid != null) {
-                tipoPersonaid.getPermisoUsuarioList().add(permisoUsuario);
-                tipoPersonaid = em.merge(tipoPersonaid);
+            if (tipoUsuarioid != null) {
+                tipoUsuarioid.getPermisoUsuarioList().add(permisoUsuario);
+                tipoUsuarioid = em.merge(tipoUsuarioid);
             }
             em.getTransaction().commit();
         } finally {
@@ -73,15 +73,15 @@ public class PermisoUsuarioJpaController implements Serializable {
             PermisoUsuario persistentPermisoUsuario = em.find(PermisoUsuario.class, permisoUsuario.getId());
             Permiso permisoidOld = persistentPermisoUsuario.getPermisoid();
             Permiso permisoidNew = permisoUsuario.getPermisoid();
-            TipoPersona tipoPersonaidOld = persistentPermisoUsuario.getTipoPersonaid();
-            TipoPersona tipoPersonaidNew = permisoUsuario.getTipoPersonaid();
+            TipoUsuario tipoUsuarioidOld = persistentPermisoUsuario.getTipoUsuarioid();
+            TipoUsuario tipoUsuarioidNew = permisoUsuario.getTipoUsuarioid();
             if (permisoidNew != null) {
                 permisoidNew = em.getReference(permisoidNew.getClass(), permisoidNew.getId());
                 permisoUsuario.setPermisoid(permisoidNew);
             }
-            if (tipoPersonaidNew != null) {
-                tipoPersonaidNew = em.getReference(tipoPersonaidNew.getClass(), tipoPersonaidNew.getId());
-                permisoUsuario.setTipoPersonaid(tipoPersonaidNew);
+            if (tipoUsuarioidNew != null) {
+                tipoUsuarioidNew = em.getReference(tipoUsuarioidNew.getClass(), tipoUsuarioidNew.getId());
+                permisoUsuario.setTipoUsuarioid(tipoUsuarioidNew);
             }
             permisoUsuario = em.merge(permisoUsuario);
             if (permisoidOld != null && !permisoidOld.equals(permisoidNew)) {
@@ -92,13 +92,13 @@ public class PermisoUsuarioJpaController implements Serializable {
                 permisoidNew.getPermisoUsuarioList().add(permisoUsuario);
                 permisoidNew = em.merge(permisoidNew);
             }
-            if (tipoPersonaidOld != null && !tipoPersonaidOld.equals(tipoPersonaidNew)) {
-                tipoPersonaidOld.getPermisoUsuarioList().remove(permisoUsuario);
-                tipoPersonaidOld = em.merge(tipoPersonaidOld);
+            if (tipoUsuarioidOld != null && !tipoUsuarioidOld.equals(tipoUsuarioidNew)) {
+                tipoUsuarioidOld.getPermisoUsuarioList().remove(permisoUsuario);
+                tipoUsuarioidOld = em.merge(tipoUsuarioidOld);
             }
-            if (tipoPersonaidNew != null && !tipoPersonaidNew.equals(tipoPersonaidOld)) {
-                tipoPersonaidNew.getPermisoUsuarioList().add(permisoUsuario);
-                tipoPersonaidNew = em.merge(tipoPersonaidNew);
+            if (tipoUsuarioidNew != null && !tipoUsuarioidNew.equals(tipoUsuarioidOld)) {
+                tipoUsuarioidNew.getPermisoUsuarioList().add(permisoUsuario);
+                tipoUsuarioidNew = em.merge(tipoUsuarioidNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -134,10 +134,10 @@ public class PermisoUsuarioJpaController implements Serializable {
                 permisoid.getPermisoUsuarioList().remove(permisoUsuario);
                 permisoid = em.merge(permisoid);
             }
-            TipoPersona tipoPersonaid = permisoUsuario.getTipoPersonaid();
-            if (tipoPersonaid != null) {
-                tipoPersonaid.getPermisoUsuarioList().remove(permisoUsuario);
-                tipoPersonaid = em.merge(tipoPersonaid);
+            TipoUsuario tipoUsuarioid = permisoUsuario.getTipoUsuarioid();
+            if (tipoUsuarioid != null) {
+                tipoUsuarioid.getPermisoUsuarioList().remove(permisoUsuario);
+                tipoUsuarioid = em.merge(tipoUsuarioid);
             }
             em.remove(permisoUsuario);
             em.getTransaction().commit();

@@ -10,6 +10,7 @@ import controladores.PermisoUsuarioJpaController;
 import controladores.TipoUsuarioJpaController;
 import entidades.Permiso;
 import entidades.PermisoUsuario;
+import entidades.TipoPersona;
 import entidades.TipoUsuario;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,13 +43,7 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
         //setResizable(Boolean.TRUE);
         
         controladorPU=new PermisoUsuarioJpaController(Principal.conexion.getEmf());
-        controladorTU=new TipoUsuarioJpaController(Principal.conexion.getEmf());
-        Query q;
-        q = Principal.conexion.getEmf().createEntityManager().createNamedQuery("TipoUsuario.MaxId");
-        Object maximo = q.getSingleResult();
-        if(maximo!=null){
-            id=(int)maximo+1;
-        }        
+        controladorTU=new TipoUsuarioJpaController(Principal.conexion.getEmf());    
         cargarPermisos();
         actualizarListaTabla();
    }
@@ -175,14 +170,13 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         // TODO add your handling code here:
         if(campoTipo.getText().compareTo("")!=0){
-            controladorTU.create(new TipoUsuario(id, campoTipo.getText()));
-            for(int i=0;i<permisosUsuario.size();i++){
-                for(int j=0;j<permisos.size();j++){
-                    if(permisosUsuario.get(i).compareTo(permisos.get(j).getPermiso())==0){
-                       // controladorPU.create(new PermisoUsuario(0,1,id));
-                    }
-                }
-            }
+            controladorTU.create(new TipoUsuario(0, campoTipo.getText()));
+            cargarMaxID();
+            permisosUsuario.stream().forEach((permisosUsuario1) -> {
+                permisos.stream().filter((permiso) -> (permisosUsuario1.compareTo(permiso.getPermiso()) == 0)).forEach((permiso) -> {
+                    controladorPU.create(new PermisoUsuario(0, permiso, new TipoUsuario(id)));
+                });
+            });
             JOptionPane.showMessageDialog(this, "Creacion de Tipo de usuario exitosa.");
             this.dispose();
         }
@@ -205,6 +199,14 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
         }
     }
     
+    public void cargarMaxID(){
+        Query q;
+        q = Principal.conexion.getEmf().createEntityManager().createNamedQuery("TipoUsuario.MaxId");
+        Object maximo = q.getSingleResult();
+        if(maximo!=null){
+            id=(int)maximo;
+        }    
+    }
     private void actualizarListaTabla(){
         DefaultTableModel modelo = new DefaultTableModel();
         jTable1.setModel(modelo);

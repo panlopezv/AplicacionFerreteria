@@ -24,13 +24,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Pablo
  */
 @Entity
-@Table(name = "permiso_usuario", catalog = "ferreteriadeleon", schema = "")
+@Table(name = "permiso_usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PermisoUsuario.findAll", query = "SELECT p FROM PermisoUsuario p"),
-    @NamedQuery(name = "PermisoUsuario.findById", query = "SELECT p FROM PermisoUsuario p WHERE p.id = :id"),
-    @NamedQuery(name = "PermisoUsuario.findByPermisoid", query = "SELECT p FROM PermisoUsuario p WHERE p.permisoid = :archivoid"),
-    @NamedQuery(name = "PermisoUsuario.findByTipopersonaid", query = "SELECT p FROM PermisoUsuario p WHERE p.tipoPersonaid = :tipoPersonaid")})
+    @NamedQuery(name = "PermisoUsuario.findById", query = "SELECT p FROM PermisoUsuario p WHERE p.id = :id")})
 public class PermisoUsuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,15 +39,21 @@ public class PermisoUsuario implements Serializable {
     @JoinColumn(name = "Permiso_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Permiso permisoid;
-    @JoinColumn(name = "Tipo_Persona_id", referencedColumnName = "id")
+    @JoinColumn(name = "Tipo_Usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private TipoPersona tipoPersonaid;
+    private TipoUsuario tipoUsuarioid;
 
     public PermisoUsuario() {
     }
 
     public PermisoUsuario(Integer id) {
         this.id = id;
+    }
+
+    public PermisoUsuario(Integer id, Permiso permisoid, TipoUsuario tipoUsuarioid) {
+        this.id = id;
+        this.permisoid=permisoid;
+        this.tipoUsuarioid=tipoUsuarioid;
     }
 
     public Integer getId() {
@@ -68,12 +72,12 @@ public class PermisoUsuario implements Serializable {
         this.permisoid = permisoid;
     }
 
-    public TipoPersona getTipoPersonaid() {
-        return tipoPersonaid;
+    public TipoUsuario getTipoUsuarioid() {
+        return tipoUsuarioid;
     }
 
-    public void setTipoPersonaid(TipoPersona tipoPersonaid) {
-        this.tipoPersonaid = tipoPersonaid;
+    public void setTipoUsuarioid(TipoUsuario tipoUsuarioid) {
+        this.tipoUsuarioid = tipoUsuarioid;
     }
 
     @Override

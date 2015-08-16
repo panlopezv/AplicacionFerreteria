@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Pablo
  */
 @Entity
-@Table(name = "tipo_usuario", catalog = "ferreteriadeleon", schema = "")
+@Table(name = "tipo_usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoUsuario.findAll", query = "SELECT t FROM TipoUsuario t"),
-    @NamedQuery(name = "TipoUsuario.MaxId", query = "SELECT MAX(t.id) FROM TipoUsuario t"),
+    @NamedQuery(name = "TipoUsuario.MaxId", query = "Select MAX(t.id) FROM TipoUsuario t"),
     @NamedQuery(name = "TipoUsuario.findById", query = "SELECT t FROM TipoUsuario t WHERE t.id = :id"),
     @NamedQuery(name = "TipoUsuario.findByTipo", query = "SELECT t FROM TipoUsuario t WHERE t.tipo = :tipo")})
 public class TipoUsuario implements Serializable {
@@ -43,6 +43,8 @@ public class TipoUsuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "Tipo")
     private String tipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuarioid")
+    private List<PermisoUsuario> permisoUsuarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuarioid")
     private List<Usuario> usuarioList;
 
@@ -72,6 +74,15 @@ public class TipoUsuario implements Serializable {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    @XmlTransient
+    public List<PermisoUsuario> getPermisoUsuarioList() {
+        return permisoUsuarioList;
+    }
+
+    public void setPermisoUsuarioList(List<PermisoUsuario> permisoUsuarioList) {
+        this.permisoUsuarioList = permisoUsuarioList;
     }
 
     @XmlTransient
