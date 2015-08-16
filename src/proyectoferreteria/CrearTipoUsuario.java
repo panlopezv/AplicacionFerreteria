@@ -66,6 +66,8 @@ public class CrearTipoUsuario extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
+        setTitle("Crear tipo usuario");
+
         jLabel1.setText("Tipo usuario:");
 
         jLabel2.setText("Permisos:");
