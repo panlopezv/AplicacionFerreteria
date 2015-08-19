@@ -39,92 +39,92 @@ public class PersonaJpaController implements Serializable {
     }
 
     public void create(Persona persona) {
-        if (persona.getCompraList() == null) {
-            persona.setCompraList(new ArrayList<Compra>());
-        }
-        if (persona.getVentaList() == null) {
-            persona.setVentaList(new ArrayList<Venta>());
-        }
-        if (persona.getPersonaProveedorList() == null) {
-            persona.setPersonaProveedorList(new ArrayList<PersonaProveedor>());
-        }
-        if (persona.getUsuarioList() == null) {
-            persona.setUsuarioList(new ArrayList<Usuario>());
-        }
+//        if (persona.getCompraList() == null) {
+//            persona.setCompraList(new ArrayList<Compra>());
+//        }
+//        if (persona.getVentaList() == null) {
+//            persona.setVentaList(new ArrayList<Venta>());
+//        }
+//        if (persona.getPersonaProveedorList() == null) {
+//            persona.setPersonaProveedorList(new ArrayList<PersonaProveedor>());
+//        }
+//        if (persona.getUsuarioList() == null) {
+//            persona.setUsuarioList(new ArrayList<Usuario>());
+//        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            TipoPersona tipoPersonaid = persona.getTipoPersonaid();
-            if (tipoPersonaid != null) {
-                tipoPersonaid = em.getReference(tipoPersonaid.getClass(), tipoPersonaid.getId());
-                persona.setTipoPersonaid(tipoPersonaid);
-            }
-            List<Compra> attachedCompraList = new ArrayList<Compra>();
-            for (Compra compraListCompraToAttach : persona.getCompraList()) {
-                compraListCompraToAttach = em.getReference(compraListCompraToAttach.getClass(), compraListCompraToAttach.getId());
-                attachedCompraList.add(compraListCompraToAttach);
-            }
-            persona.setCompraList(attachedCompraList);
-            List<Venta> attachedVentaList = new ArrayList<Venta>();
-            for (Venta ventaListVentaToAttach : persona.getVentaList()) {
-                ventaListVentaToAttach = em.getReference(ventaListVentaToAttach.getClass(), ventaListVentaToAttach.getId());
-                attachedVentaList.add(ventaListVentaToAttach);
-            }
-            persona.setVentaList(attachedVentaList);
-            List<PersonaProveedor> attachedPersonaProveedorList = new ArrayList<PersonaProveedor>();
-            for (PersonaProveedor personaProveedorListPersonaProveedorToAttach : persona.getPersonaProveedorList()) {
-                personaProveedorListPersonaProveedorToAttach = em.getReference(personaProveedorListPersonaProveedorToAttach.getClass(), personaProveedorListPersonaProveedorToAttach.getId());
-                attachedPersonaProveedorList.add(personaProveedorListPersonaProveedorToAttach);
-            }
-            persona.setPersonaProveedorList(attachedPersonaProveedorList);
-            List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
-            for (Usuario usuarioListUsuarioToAttach : persona.getUsuarioList()) {
-                usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getId());
-                attachedUsuarioList.add(usuarioListUsuarioToAttach);
-            }
-            persona.setUsuarioList(attachedUsuarioList);
+//            TipoPersona tipoPersonaid = persona.getTipoPersonaid();
+//            if (tipoPersonaid != null) {
+//                tipoPersonaid = em.getReference(tipoPersonaid.getClass(), tipoPersonaid.getId());
+//                persona.setTipoPersonaid(tipoPersonaid);
+//            }
+//            List<Compra> attachedCompraList = new ArrayList<Compra>();
+//            for (Compra compraListCompraToAttach : persona.getCompraList()) {
+//                compraListCompraToAttach = em.getReference(compraListCompraToAttach.getClass(), compraListCompraToAttach.getId());
+//                attachedCompraList.add(compraListCompraToAttach);
+//            }
+//            persona.setCompraList(attachedCompraList);
+//            List<Venta> attachedVentaList = new ArrayList<Venta>();
+//            for (Venta ventaListVentaToAttach : persona.getVentaList()) {
+//                ventaListVentaToAttach = em.getReference(ventaListVentaToAttach.getClass(), ventaListVentaToAttach.getId());
+//                attachedVentaList.add(ventaListVentaToAttach);
+//            }
+//            persona.setVentaList(attachedVentaList);
+//            List<PersonaProveedor> attachedPersonaProveedorList = new ArrayList<PersonaProveedor>();
+//            for (PersonaProveedor personaProveedorListPersonaProveedorToAttach : persona.getPersonaProveedorList()) {
+//                personaProveedorListPersonaProveedorToAttach = em.getReference(personaProveedorListPersonaProveedorToAttach.getClass(), personaProveedorListPersonaProveedorToAttach.getId());
+//                attachedPersonaProveedorList.add(personaProveedorListPersonaProveedorToAttach);
+//            }
+//            persona.setPersonaProveedorList(attachedPersonaProveedorList);
+//            List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
+//            for (Usuario usuarioListUsuarioToAttach : persona.getUsuarioList()) {
+//                usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getId());
+//                attachedUsuarioList.add(usuarioListUsuarioToAttach);
+//            }
+//            persona.setUsuarioList(attachedUsuarioList);
             em.persist(persona);
-            if (tipoPersonaid != null) {
-                tipoPersonaid.getPersonaList().add(persona);
-                tipoPersonaid = em.merge(tipoPersonaid);
-            }
-            for (Compra compraListCompra : persona.getCompraList()) {
-                Persona oldDelegadoProveedoridOfCompraListCompra = compraListCompra.getDelegadoProveedorid();
-                compraListCompra.setDelegadoProveedorid(persona);
-                compraListCompra = em.merge(compraListCompra);
-                if (oldDelegadoProveedoridOfCompraListCompra != null) {
-                    oldDelegadoProveedoridOfCompraListCompra.getCompraList().remove(compraListCompra);
-                    oldDelegadoProveedoridOfCompraListCompra = em.merge(oldDelegadoProveedoridOfCompraListCompra);
-                }
-            }
-            for (Venta ventaListVenta : persona.getVentaList()) {
-                Persona oldPersonaidOfVentaListVenta = ventaListVenta.getPersonaid();
-                ventaListVenta.setPersonaid(persona);
-                ventaListVenta = em.merge(ventaListVenta);
-                if (oldPersonaidOfVentaListVenta != null) {
-                    oldPersonaidOfVentaListVenta.getVentaList().remove(ventaListVenta);
-                    oldPersonaidOfVentaListVenta = em.merge(oldPersonaidOfVentaListVenta);
-                }
-            }
-            for (PersonaProveedor personaProveedorListPersonaProveedor : persona.getPersonaProveedorList()) {
-                Persona oldPersonaidOfPersonaProveedorListPersonaProveedor = personaProveedorListPersonaProveedor.getPersonaid();
-                personaProveedorListPersonaProveedor.setPersonaid(persona);
-                personaProveedorListPersonaProveedor = em.merge(personaProveedorListPersonaProveedor);
-                if (oldPersonaidOfPersonaProveedorListPersonaProveedor != null) {
-                    oldPersonaidOfPersonaProveedorListPersonaProveedor.getPersonaProveedorList().remove(personaProveedorListPersonaProveedor);
-                    oldPersonaidOfPersonaProveedorListPersonaProveedor = em.merge(oldPersonaidOfPersonaProveedorListPersonaProveedor);
-                }
-            }
-            for (Usuario usuarioListUsuario : persona.getUsuarioList()) {
-                Persona oldPersonaidOfUsuarioListUsuario = usuarioListUsuario.getPersonaid();
-                usuarioListUsuario.setPersonaid(persona);
-                usuarioListUsuario = em.merge(usuarioListUsuario);
-                if (oldPersonaidOfUsuarioListUsuario != null) {
-                    oldPersonaidOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
-                    oldPersonaidOfUsuarioListUsuario = em.merge(oldPersonaidOfUsuarioListUsuario);
-                }
-            }
+//            if (tipoPersonaid != null) {
+//                tipoPersonaid.getPersonaList().add(persona);
+//                tipoPersonaid = em.merge(tipoPersonaid);
+//            }
+//            for (Compra compraListCompra : persona.getCompraList()) {
+//                Persona oldDelegadoProveedoridOfCompraListCompra = compraListCompra.getDelegadoProveedorid();
+//                compraListCompra.setDelegadoProveedorid(persona);
+//                compraListCompra = em.merge(compraListCompra);
+//                if (oldDelegadoProveedoridOfCompraListCompra != null) {
+//                    oldDelegadoProveedoridOfCompraListCompra.getCompraList().remove(compraListCompra);
+//                    oldDelegadoProveedoridOfCompraListCompra = em.merge(oldDelegadoProveedoridOfCompraListCompra);
+//                }
+//            }
+//            for (Venta ventaListVenta : persona.getVentaList()) {
+//                Persona oldPersonaidOfVentaListVenta = ventaListVenta.getPersonaid();
+//                ventaListVenta.setPersonaid(persona);
+//                ventaListVenta = em.merge(ventaListVenta);
+//                if (oldPersonaidOfVentaListVenta != null) {
+//                    oldPersonaidOfVentaListVenta.getVentaList().remove(ventaListVenta);
+//                    oldPersonaidOfVentaListVenta = em.merge(oldPersonaidOfVentaListVenta);
+//                }
+//            }
+//            for (PersonaProveedor personaProveedorListPersonaProveedor : persona.getPersonaProveedorList()) {
+//                Persona oldPersonaidOfPersonaProveedorListPersonaProveedor = personaProveedorListPersonaProveedor.getPersonaid();
+//                personaProveedorListPersonaProveedor.setPersonaid(persona);
+//                personaProveedorListPersonaProveedor = em.merge(personaProveedorListPersonaProveedor);
+//                if (oldPersonaidOfPersonaProveedorListPersonaProveedor != null) {
+//                    oldPersonaidOfPersonaProveedorListPersonaProveedor.getPersonaProveedorList().remove(personaProveedorListPersonaProveedor);
+//                    oldPersonaidOfPersonaProveedorListPersonaProveedor = em.merge(oldPersonaidOfPersonaProveedorListPersonaProveedor);
+//                }
+//            }
+//            for (Usuario usuarioListUsuario : persona.getUsuarioList()) {
+//                Persona oldPersonaidOfUsuarioListUsuario = usuarioListUsuario.getPersonaid();
+//                usuarioListUsuario.setPersonaid(persona);
+//                usuarioListUsuario = em.merge(usuarioListUsuario);
+//                if (oldPersonaidOfUsuarioListUsuario != null) {
+//                    oldPersonaidOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
+//                    oldPersonaidOfUsuarioListUsuario = em.merge(oldPersonaidOfUsuarioListUsuario);
+//                }
+//            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {

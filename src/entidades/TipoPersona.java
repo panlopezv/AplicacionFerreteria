@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoPersona.findAll", query = "SELECT t FROM TipoPersona t"),
+    @NamedQuery(name = "TipoPersona.MaxId", query = "Select MAX(t.id) FROM TipoPersona t"),
     @NamedQuery(name = "TipoPersona.findById", query = "SELECT t FROM TipoPersona t WHERE t.id = :id"),
     @NamedQuery(name = "TipoPersona.findByTipo", query = "SELECT t FROM TipoPersona t WHERE t.tipo = :tipo")})
 public class TipoPersona implements Serializable {

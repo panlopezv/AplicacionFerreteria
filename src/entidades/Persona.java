@@ -86,11 +86,25 @@ public class Persona implements Serializable {
         this.id = id;
     }
 
-    public Persona(Integer id, String nombre, String apellido, String direccion) {
+    public Persona(Integer id, String nombre, String apellido, String direccion, String nit) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
+        this.nit = nit;
+    }
+
+    public Persona(Integer id, String nombre, String apellido, String direccion, String cui, String nit, String correo, String telefono1, String telefono2, TipoPersona tipoPersonaid) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.cui = cui;
+        this.nit = nit;
+        this.correo = correo;
+        this.telefono1 = telefono1;
+        this.telefono2 = telefono2;
+        this.tipoPersonaid = tipoPersonaid;
     }
 
     public Integer getId() {

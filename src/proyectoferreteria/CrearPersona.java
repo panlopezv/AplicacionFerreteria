@@ -5,12 +5,30 @@
  */
 package proyectoferreteria;
 
+import conexion.ConexionJPA;
+import controladores.PersonaJpaController;
+import controladores.TipoPersonaJpaController;
+import entidades.Persona;
+import entidades.TipoPersona;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.persistence.Query;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import static proyectoferreteria.Principal.conexion;
+
 /**
  *
  * @author Pablo
  */
 public class CrearPersona extends javax.swing.JInternalFrame {
 
+    PersonaJpaController controladorP;
+    TipoPersonaJpaController controladorTP;
+    List<TipoPersona> tiposP;
     /**
      * Creates new form CrearPersona
      */
@@ -20,6 +38,10 @@ public class CrearPersona extends javax.swing.JInternalFrame {
         setVisible(Boolean.TRUE);
         setClosable(Boolean.TRUE);
         //setResizable(Boolean.TRUE);
+        controladorP = new PersonaJpaController(Principal.conexion.getEmf());
+        controladorTP = new TipoPersonaJpaController(Principal.conexion.getEmf());
+        cargarTipoPersona(0);
+        
     }
 
     /**
@@ -34,55 +56,101 @@ public class CrearPersona extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         tiposPersona = new javax.swing.JComboBox();
         agregarTipoPersona = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        etiquetaNombre = new javax.swing.JLabel();
         campoNombres = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        etiquetaApellido = new javax.swing.JLabel();
         campoApellidos = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        etiquetaDireccion = new javax.swing.JLabel();
         campoDireccion = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        etiquetaCUI = new javax.swing.JLabel();
         campoCUI = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        etiquetaNIT = new javax.swing.JLabel();
         campoNIT = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        etiquetaCorreo = new javax.swing.JLabel();
         campoCorreo = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        etiquetaN1 = new javax.swing.JLabel();
         campoTelefono1 = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
+        etiquetaN2 = new javax.swing.JLabel();
         campoTelefono2 = new javax.swing.JTextField();
         botonCancelar = new javax.swing.JButton();
         botonAceptar = new javax.swing.JButton();
         botonLimpiar = new javax.swing.JButton();
 
         setTitle("Crear persona");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Tipo persona:");
 
         tiposPersona.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         agregarTipoPersona.setText("Nuevo");
+        agregarTipoPersona.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarTipoPersonaActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Nombre(s):");
+        etiquetaNombre.setText("Nombre(s):");
 
-        jLabel3.setText("Apellido(s):");
+        etiquetaApellido.setText("Apellido(s):");
 
-        jLabel4.setText("Dirección:");
+        etiquetaDireccion.setText("Dirección:");
 
-        jLabel5.setText("CUI:");
+        etiquetaCUI.setText("CUI:");
 
-        jLabel6.setText("NIT:");
+        etiquetaNIT.setText("NIT:");
 
-        jLabel7.setText("Correo:");
+        etiquetaCorreo.setText("Correo:");
 
-        jLabel8.setText("Telefono 1:");
+        etiquetaN1.setText("Telefono 1:");
 
-        jLabel9.setText("Telefono 2:");
+        etiquetaN2.setText("Telefono 2:");
+
+        campoTelefono2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoTelefono2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                campoTelefono2KeyTyped(evt);
+            }
+        });
 
         botonCancelar.setText("Cancelar");
+        botonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCancelarActionPerformed(evt);
+            }
+        });
 
         botonAceptar.setText("Aceptar");
+        botonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAceptarActionPerformed(evt);
+            }
+        });
 
         botonLimpiar.setText("Limpiar campos");
+        botonLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,14 +159,14 @@ public class CrearPersona extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
+                    .addComponent(etiquetaN2)
+                    .addComponent(etiquetaN1)
+                    .addComponent(etiquetaCorreo)
+                    .addComponent(etiquetaNIT)
+                    .addComponent(etiquetaCUI)
+                    .addComponent(etiquetaDireccion)
+                    .addComponent(etiquetaApellido)
+                    .addComponent(etiquetaNombre)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -133,37 +201,37 @@ public class CrearPersona extends javax.swing.JInternalFrame {
                     .addComponent(agregarTipoPersona))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
+                    .addComponent(etiquetaNombre)
                     .addComponent(campoNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(etiquetaApellido)
                     .addComponent(campoApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(etiquetaDireccion)
                     .addComponent(campoDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(etiquetaCUI)
                     .addComponent(campoCUI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(etiquetaNIT)
                     .addComponent(campoNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                    .addComponent(etiquetaCorreo)
                     .addComponent(campoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
+                    .addComponent(etiquetaN1)
                     .addComponent(campoTelefono1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
+                    .addComponent(etiquetaN2)
                     .addComponent(campoTelefono2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonCancelar)
                     .addComponent(botonAceptar)
@@ -174,6 +242,149 @@ public class CrearPersona extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void agregarTipoPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarTipoPersonaActionPerformed
+        // TODO add your handling code here:JTextField user = new JTextField();
+        JTextField campoTipoPersona = new JTextField();
+        Object[] message = {
+            "Tipo: ", campoTipoPersona,
+        };
+        int opcion = JOptionPane.showConfirmDialog(this, message, "Crear tipo persona.", JOptionPane.OK_CANCEL_OPTION);
+        if (opcion == JOptionPane.OK_OPTION) { 
+            if(campoTipoPersona.getText().compareTo("")!=0){
+                controladorTP.create(new TipoPersona(0,campoTipoPersona.getText()));
+                JOptionPane.showMessageDialog(this, "Creacion de tipo persona realizado exitosamente.");
+                Query q = Principal.conexion.getEm().createNamedQuery("TipoPersona.MaxId");
+                cargarTipoPersona((int)q.getSingleResult());
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Debe ingresar un valor para el campo \"tipo\".");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ha cancelado la creacion de tipo persona.");
+        }
+        
+    }//GEN-LAST:event_agregarTipoPersonaActionPerformed
+
+    private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
+        // TODO add your handling code here:
+        cargarTipoPersona(0);
+        campoNombres.setText("");
+        campoApellidos.setText("");
+        campoDireccion.setText("");
+        campoCUI.setText("");
+        campoNIT.setText("");
+        campoCorreo.setText("");
+        campoTelefono1.setText("");
+        campoTelefono2.setText("");
+    }//GEN-LAST:event_botonLimpiarActionPerformed
+
+    private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_botonCancelarActionPerformed
+
+    private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
+        // TODO add your handling code here:
+        ArrayList<String> errores = new ArrayList<>();
+        if(tiposPersona.getSelectedIndex()==0){
+            errores.add("Debe seleccionar un tipo de persona.");
+        }
+        if(campoNombres.getText().compareTo("")==0){
+            errores.add("Debe ingresar el nombre de la persona.");
+        }
+        if(campoApellidos.getText().compareTo("")==0){
+            errores.add("Debe ingresar el apellido de la persona.");
+        }
+        if(campoDireccion.getText().compareTo("")==0){
+            errores.add("Debe ingresar la direccion de la persona.");
+        }
+        if(campoCUI.getText().length()+1>0&&campoCUI.getText().compareTo("")!=0){
+            Pattern pat = Pattern.compile("[0-9]{13}");
+            Matcher mat = pat.matcher(campoCUI.getText());
+            if (mat.matches()==Boolean.FALSE) {
+                errores.add("La longitud del CUI debe ser exactamente 13 digitos.");
+            }
+        }
+        if(campoNIT.getText().length()+1>0&&campoNIT.getText().compareTo("")!=0){
+            Pattern pat = Pattern.compile("[0-9]{9}|[cC][fF]");//longitud -1
+            Matcher mat = pat.matcher(campoNIT.getText());
+            if (mat.matches()==Boolean.FALSE) {
+                errores.add("Debe ingresar el NIT de la persona");
+            }
+        }
+        if(campoCorreo.getText().length()+1>0&&campoCorreo.getText().compareTo("")!=0){
+            Pattern pat = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+            Matcher mat = pat.matcher(campoCorreo.getText());
+            if (mat.matches()==Boolean.FALSE) {
+                errores.add("Debe ingresar un correo electronico valido.");
+            }
+        }
+        if(campoTelefono1.getText().length()+1>0&&campoTelefono1.getText().compareTo("")!=0){
+            Pattern pat = Pattern.compile("[0-9]{8}");
+            Matcher mat = pat.matcher(campoTelefono1.getText());
+            if (mat.matches()==Boolean.FALSE) {
+                errores.add("La longitud del numero de telefono debe ser exactamente 8 digitos.");
+            }
+        }
+        if(campoTelefono2.getText().length()+1>0&&campoTelefono2.getText().compareTo("")!=0){
+            Pattern pat = Pattern.compile("[0-9]{8}");
+            Matcher mat = pat.matcher(campoTelefono2.getText());
+            if (mat.matches()==Boolean.FALSE) {
+                errores.add("La longitud del numero de telefono debe ser exactamente 8 digitos.");
+            }
+        }
+        if(errores.size()>0){
+            String mensajeErrores="";
+            for(int i=0;i<errores.size();i++){
+                mensajeErrores+=errores.get(i)+"\r\n";
+            }
+            JOptionPane.showMessageDialog(this, mensajeErrores, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            TipoPersona tp = null;
+            for(int i = 0; i< tiposP.size();i++){
+                if(tiposP.get(i).getTipo().compareTo((String) tiposPersona.getSelectedItem())==0){
+                    tp = tiposP.get(i);
+                    break;
+                }
+            }
+            Persona nueva = new Persona(0, campoNombres.getText(), campoApellidos.getText(), campoDireccion.getText(), campoCUI.getText(), campoNIT.getText() , campoCorreo.getText(), campoTelefono1.getText(), campoTelefono2.getText(), tp);
+            controladorP.create(nueva);
+            JOptionPane.showMessageDialog(this, "Persona creada exitosamente.");
+        }
+    }//GEN-LAST:event_botonAceptarActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_formInternalFrameClosing
+
+    private void campoTelefono2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoTelefono2KeyPressed
+        // TODO add your handling code here:  
+    }//GEN-LAST:event_campoTelefono2KeyPressed
+
+    private void campoTelefono2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoTelefono2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoTelefono2KeyTyped
+    
+    private void cargarTipoPersona(int id){
+        tiposPersona.removeAllItems();
+        tiposP=controladorTP.findTipoPersonaEntities();
+        tiposPersona.addItem("Seleccione un tipo");
+        for(int i=0;i<tiposP.size();i++){
+            tiposPersona.addItem(tiposP.get(i).getTipo());
+        }
+        if(id!=0){
+            String t="";
+            for(int i=0;i<tiposP.size();i++){
+                if(id==tiposP.get(i).getId()){
+                    t=tiposP.get(i).getTipo();
+                    break;
+                }
+            }
+            tiposPersona.setSelectedItem(t);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarTipoPersona;
@@ -188,15 +399,15 @@ public class CrearPersona extends javax.swing.JInternalFrame {
     private javax.swing.JTextField campoNombres;
     private javax.swing.JTextField campoTelefono1;
     private javax.swing.JTextField campoTelefono2;
+    private javax.swing.JLabel etiquetaApellido;
+    private javax.swing.JLabel etiquetaCUI;
+    private javax.swing.JLabel etiquetaCorreo;
+    private javax.swing.JLabel etiquetaDireccion;
+    private javax.swing.JLabel etiquetaN1;
+    private javax.swing.JLabel etiquetaN2;
+    private javax.swing.JLabel etiquetaNIT;
+    private javax.swing.JLabel etiquetaNombre;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JComboBox tiposPersona;
     // End of variables declaration//GEN-END:variables
 }
