@@ -5,7 +5,7 @@
  */
 package Compras;
 
-import entidades.ProductoPresentacion;
+import entidades.ProductoSucursal;
 
 /**
  *
@@ -21,7 +21,7 @@ public class ItemProducto {
     String Sucursal;
     Double Precio;
     int cantidad;
-    ProductoPresentacion pp;
+    ProductoSucursal ps;
 
     public ItemProducto() {
     }
@@ -90,12 +90,12 @@ public class ItemProducto {
         this.cantidad = cantidad;
     }
 
-    public ProductoPresentacion getPp() {
-        return pp;
+    public ProductoSucursal getPs() {
+        return ps;
     }
 
-    public void setPp(ProductoPresentacion pp) {
-        this.pp = pp;
+    public void setPs(ProductoSucursal ps) {
+        this.ps = ps;
     }
     
     

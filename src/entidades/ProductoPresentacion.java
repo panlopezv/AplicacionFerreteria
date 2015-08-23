@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductoPresentacion.findMaxId", query = "SELECT MAX(p.id) FROM ProductoPresentacion p"),
     @NamedQuery(name = "ProductoPresentacion.findAll", query = "SELECT p FROM ProductoPresentacion p"),
     @NamedQuery(name = "ProductoPresentacion.findById", query = "SELECT p FROM ProductoPresentacion p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductoPresentacion.findByCodigo", query = "SELECT p FROM ProductoPresentacion p WHERE p.codigo = :codigo")})
+    @NamedQuery(name = "ProductoPresentacion.findByCodigo", query = "SELECT p FROM ProductoPresentacion p WHERE p.codigo like :codigo")})
 public class ProductoPresentacion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -64,18 +64,19 @@ public class CrearProducto {
     public void setSucursal(ArrayList<Sucursal> sucursal) {
         this.sucursal = sucursal;
     }
-    public void setSucursal(List<ProductoSucursal> ps){
-        for(ProductoSucursal psa: ps){
+
+    public void setSucursal(List<ProductoSucursal> ps) {
+        for (ProductoSucursal psa : ps) {
             sucursal.add(psa.getSucursalid());
-            
+
         }
-        
+
     }
 
     public void setCategoria(String c) {
         productos.buscarCategoria(c);
     }
-  
+
     public void setPresentacion(String presentacion) {
         productos.buscarPresentacion(presentacion);
     }
@@ -176,12 +177,11 @@ public class CrearProducto {
                         var = false;
 
                     }
-                    System.out.println(su.getId()+" "+s.getId());
                 }
 
                 if (var) {
                     Suc[j] = "Sucursal " + su.getId();
-                    
+
                     j++;
                 }
                 var = true;
@@ -200,7 +200,8 @@ public class CrearProducto {
             return Suc;
         }
     }
-    public ProductoPresentacion getPPresentacion(){
+
+    public ProductoPresentacion getPPresentacion() {
         return productos.getPprestenacion();
     }
 
@@ -208,11 +209,12 @@ public class CrearProducto {
 
         boolean var = true;
         boolean var2 = true;
+        JTextField field1 = new JTextField("");
+        JTextField field2 = new JTextField("");
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
-            JTextField field1 = new JTextField("");
-            JTextField field2 = new JTextField("");
+
             JPanel panel = new JPanel(new GridLayout(0, 1));
             panel.add(new JLabel("Seleccione una sucursal"));
             panel.add(combo);
@@ -230,17 +232,17 @@ public class CrearProducto {
                 Matcher m2 = n2.matcher(field2.getText());
                 if (!m.matches()) {
                     //valida cantidad
-                    JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
+                    JOptionPane.showMessageDialog(c, "Entrada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
                     field1.setText("");
+                    field1.requestFocus();
 
                 } else {
                     if (!m2.matches()) {
-                        JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
+                        JOptionPane.showMessageDialog(c, "Entrada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
                         field2.setText("");
+                        field2.requestFocus();
 
                     } else {
-                        
-                        System.out.println(m.matches()+" "+m2.matches());
 
                         //para que lo guarde la primera vez
                         if (var2) {
@@ -271,12 +273,11 @@ public class CrearProducto {
                                 ((JInternalFrame) c).dispose();
 
                             }
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(c, "No existe Otra sucursal");
-                            var= false;
+                            var = false;
                             ((JInternalFrame) c).dispose();
-                        
-                            
+
                         }
 
                     }
@@ -299,12 +300,12 @@ public class CrearProducto {
     public void nuevaPresentacion(Component c) {
         boolean var = true;
         boolean var2 = true;
-        productos.crearProductoP();
+
+        JTextField field1 = new JTextField("");
+        JTextField field2 = new JTextField("");
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
-            JTextField field1 = new JTextField("");
-            JTextField field2 = new JTextField("");
             JPanel panel = new JPanel(new GridLayout(0, 1));
             panel.add(new JLabel("Seleccione una sucursal"));
             panel.add(combo);
@@ -312,34 +313,39 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
-            Pattern n = Pattern.compile("[0-9]*?[0-9]*$");
-            Pattern n2 = Pattern.compile("[0-9]*\\.?[0-9]*$");
+            Pattern n = Pattern.compile("[0-9]+[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]+[0-9]*?\\.?[0-9]*$");
             int result = JOptionPane.showConfirmDialog(c, panel, "Crear Presentacion",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
                 Matcher m = n.matcher(field1.getText());
                 Matcher m2 = n2.matcher(field2.getText());
-                if (!m.matches()&&field1.getText().compareTo("")==0) {
+                if (!m.matches()) {
                     //valida cantidad
                     JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
                     field1.setText("");
+                    field1.requestFocus();
 
                 } else {
-                    if (!m2.matches()&&field2.getText().compareTo("")==0) {
+                    if (!m2.matches()) {
                         JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
                         field2.setText("");
+                        field2.requestFocus();
 
                     } else {
                         if (var2) {
+
+                            productos.crearProductoP();
                             var2 = false;
                         }
-
+                        System.out.println(m.matches()+"  "+m2.matches());
+                                
                         Sucursal s = productos.getSucursal((String) combo.getSelectedItem());
 
                         ProductoSucursal ps = new ProductoSucursal();
                         ps.setExistencias(Integer.parseInt(field1.getText()));
-                        ps.setPrecio(Integer.parseInt(field2.getText()));
+                        ps.setPrecio(Double.parseDouble(field2.getText()));
                         ps.setSucursalid(s);
                         sucursal.add(s);
 
@@ -382,11 +388,12 @@ public class CrearProducto {
 
     public void nuevaSucursal(Component c) {
         boolean var = true;
+
+        JTextField field1 = new JTextField("");
+        JTextField field2 = new JTextField("");
         do {
             String[] items = getsinSucursal();
             JComboBox combo = new JComboBox(items);
-            JTextField field1 = new JTextField("");
-            JTextField field2 = new JTextField("");
             JPanel panel = new JPanel(new GridLayout(0, 1));
             panel.add(new JLabel("Seleccione una sucursal"));
             panel.add(combo);
@@ -394,25 +401,28 @@ public class CrearProducto {
             panel.add(field1);
             panel.add(new JLabel("Precio"));
             panel.add(field2);
-            Pattern n = Pattern.compile("?[0-9]*$");
-            Pattern n2 = Pattern.compile("?[0-9]*\\.?[0-9]*$");
+
+            Pattern n = Pattern.compile("[0-9]+[0-9]*?[0-9]*$");
+            Pattern n2 = Pattern.compile("[0-9]+[0-9]*?\\.?[0-9]*$");
             if (getsinSucursal().length > 0) {
-            int result = JOptionPane.showConfirmDialog(c, panel, "Crear Sucursal",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            
+                int result = JOptionPane.showConfirmDialog(c, panel, "Crear Sucursal",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
                 if (result == JOptionPane.OK_OPTION) {
 
                     Matcher m = n.matcher(field1.getText());
                     Matcher m2 = n2.matcher(field2.getText());
-                    if (!m.matches()&&field1.getText().compareTo("")==0) {
+                    if (!m.matches()) {
                         //valida cantidad
-                        JOptionPane.showMessageDialog(c, "Entreada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
+                        JOptionPane.showMessageDialog(c, "Entrada invalida para la cantidad, compruebe que no escribio letras o valores no permitidos");
                         field1.setText("");
+                        field1.requestFocus();
 
                     } else {
-                        if (!m2.matches()&&field2.getText().compareTo("")==0) {
-                            JOptionPane.showMessageDialog(c, "Entreada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
+                        if (!m2.matches()) {
+                            JOptionPane.showMessageDialog(c, "Entrada invalida para el precio, compruebe que no escribio letras o valores no permitidos");
                             field2.setText("");
+                            field2.requestFocus();
 
                         } else {
 
@@ -473,7 +483,6 @@ public class CrearProducto {
                 clp.setNombre(cpro.getNombre());
                 clp.setMarca(cpro.getMarca());
                 clp.setCategoria(cpro.getCategoria());
-                System.out.println(pp.getPresentacionid().getPresentacion());
                 clp.setCodigo(pp.getCodigo());
                 clp.setPresentacion(pp.getPresentacionid().getPresentacion());
                 clp.setPp(pp);
@@ -485,9 +494,10 @@ public class CrearProducto {
         return clasep;
 
     }
+
     public ArrayList<ClaseProducto> BusquedaP(String n, String Categoria) {
         ArrayList<ClaseProducto> clasep = new ArrayList<>();
-        List<Producto> p = productos.buscarProducto(n,productos.getCategoria(Categoria).getId());
+        List<Producto> p = productos.buscarProducto(n, productos.getCategoria(Categoria).getId());
         for (Producto pro : p) {
             ClaseProducto cpro = new ClaseProducto();
             cpro.setNombre(pro.getNombre());
@@ -498,7 +508,6 @@ public class CrearProducto {
                 clp.setNombre(cpro.getNombre());
                 clp.setMarca(cpro.getMarca());
                 clp.setCategoria(cpro.getCategoria());
-                System.out.println(pp.getPresentacionid().getPresentacion());
                 clp.setCodigo(pp.getCodigo());
                 clp.setPresentacion(pp.getPresentacionid().getPresentacion());
                 clp.setPp(pp);
@@ -510,13 +519,13 @@ public class CrearProducto {
         return clasep;
 
     }
-    
-    public ArrayList<ClaseProducto> busquedaporCodigo(String n){
-         ArrayList<ClaseProducto> clasep = new ArrayList<>();
+
+    public ArrayList<ClaseProducto> busquedaporCodigo(String n) {
+        ArrayList<ClaseProducto> clasep = new ArrayList<>();
         List<ProductoPresentacion> p = productos.buscarProductoP(n);
-        
-        for(ProductoPresentacion pp:p){
-            ClaseProducto cp= new ClaseProducto();
+
+        for (ProductoPresentacion pp : p) {
+            ClaseProducto cp = new ClaseProducto();
             cp.setCategoria(pp.getProductoid().getCategoriaid().getCategoria());
             cp.setDescripcion(pp.getProductoid().getDescripcion());
             cp.setCodigo(pp.getCodigo());
@@ -525,10 +534,10 @@ public class CrearProducto {
             cp.setPp(pp);
             cp.setPresentacion(pp.getPresentacionid().getPresentacion());
             clasep.add(cp);
-            
+
         }
         return clasep;
-        
+
     }
 
 }
