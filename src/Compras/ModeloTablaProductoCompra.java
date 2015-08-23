@@ -16,23 +16,20 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Diaz
  */
-public class ModeloTablaProducto2 extends AbstractTableModel {
+public class ModeloTablaProductoCompra extends AbstractTableModel {
    
-    private String columnas[] = {"Codigo","Nombre","Presentacion","Marca","Categoria","Sucursal","Precio","Cantidad"};
-    ArrayList<ItemProducto> Items;
+    private String columnas[] = {"Codigo","Nombre","Presentacion","Marca","Categoria","Sucursal","Precio Compra","Cantidad de compra"};
+    ArrayList<Lproducto> Items;
 
-    public ModeloTablaProducto2(ArrayList<ItemProducto> items) {
+    public ModeloTablaProductoCompra(ArrayList<Lproducto> items) {
        
       this.Items=items;
     }
 
-    public ArrayList<ItemProducto> getProductos() {
+    public ArrayList<Lproducto> getProductos() {
         return Items;
     }
     
-    public ItemProducto getProducto(int n) {
-        return Items.get(n);
-    }
     
     
     @Override
@@ -47,7 +44,8 @@ public class ModeloTablaProducto2 extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ItemProducto a= this.Items.get(rowIndex);
+        
+        ItemProducto a= this.Items.get(rowIndex).getItem();
         
         switch(columnIndex){
             case 0: return a.getCodigo();
@@ -56,8 +54,8 @@ public class ModeloTablaProducto2 extends AbstractTableModel {
             case 3: return a.getMarca();
             case 4: return a.getCategoria();
             case 5: return a.getSucursal();
-            case 6: return a.getPrecio();  
-            case 7: return a.getCantidad();
+            case 6: return this.Items.get(rowIndex).getDetalle().getPrecio();  
+            case 7: return this.Items.get(rowIndex).getDetalle().getCantidad();
                 
             
             default: return null;
@@ -71,7 +69,13 @@ public class ModeloTablaProducto2 extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        switch(rowIndex){
+            case 6: return true;
+            case 7: return true;    
+            
+            default : return false;
+        }
+        
     }
 
     @Override

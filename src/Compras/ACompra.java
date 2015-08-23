@@ -9,6 +9,7 @@ import conexion.ConexionJPA;
 import controladores.AbonoJpaController;
 import controladores.CompraJpaController;
 import controladores.DetalleCompraJpaController;
+import controladores.LoteJpaController;
 import controladores.PersonaJpaController;
 import entidades.Abono;
 import entidades.Compra;
@@ -28,6 +29,7 @@ import javax.xml.soap.Detail;
 public abstract class ACompra {
     protected CompraJpaController cCompra;
     protected DetalleCompraJpaController cDetalle;
+    protected LoteJpaController cLote;
     protected PersonaJpaController cPersona;
     protected AbonoJpaController cAbono;
     

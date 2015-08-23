@@ -97,7 +97,7 @@ public class Productos {
      * 
      * @param Categoria, tipo String
      * 
-     * Recibe el id para referenciar  un categoria, no retorna datos ya que en esta estructura la guarda
+     * Recibe el id para referenciar  un categoria, no retorna datos ya que  esta estructura la guarda
      */
     public void buscarCategoria(String Categoria) {
         
@@ -193,7 +193,7 @@ public class Productos {
         EntityManager em = conexion.getEm();
         q = em.createNamedQuery("Presentacion.findByPresentacion");
         q.setParameter("presentacion", Id);
-        presentacion = (Presentacion) q.getSingleResult();
+        presentacion = (Presentacion) q.getResultList().get(0);
         if (presentacion == null) {
             System.out.println("error no existe presetnacion");
         }
